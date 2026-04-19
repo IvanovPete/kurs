@@ -22,3 +22,4 @@ class Lead(models.Model):
     
     def __str__(self):
         return f'{self.phone} - {self.created_at.strftime("%d.%m.%Y %H:%M")}'
+    #
