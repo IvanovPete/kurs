@@ -43,50 +43,6 @@
       <a href="#" class="u-image u-logo u-image-1" data-image-width="1012" data-image-height="396">
         <img src="images/kurs_logo.png" class="u-logo-image u-logo-image-1">
       </a>
-      <nav class="u-menu u-menu-dropdown u-offcanvas u-menu-1">
-        <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
-          <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-text-active-color u-custom-text-color u-custom-text-hover-color u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base"
-            href="#">
-            <svg class="u-svg-link" viewBox="0 0 24 24">
-              <use xlink:href="#menu-hamburger"></use>
-            </svg>
-            <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px" y="0px"
-              xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
-              <g>
-                <rect y="1" width="16" height="2"></rect>
-                <rect y="7" width="16" height="2"></rect>
-                <rect y="13" width="16" height="2"></rect>
-              </g>
-            </svg>
-          </a>
-        </div>
-        <div class="u-custom-menu u-nav-container">
-          <ul class="u-nav u-unstyled u-nav-1">
-            <li class="u-nav-item"><a
-                class="u-button-style u-nav-link u-text-active-white u-text-grey-90 u-text-hover-white"
-                href="./">Главная</a></li>
-            <li class="u-nav-item"><a
-                class="u-button-style u-nav-link u-text-active-white u-text-grey-90 u-text-hover-white"
-                href="О-нас.html">О нас</a></li>
-          </ul>
-        </div>
-        <div class="u-custom-menu u-nav-container-collapse">
-          <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
-            <div class="u-inner-container-layout u-sidenav-overflow">
-              <div class="u-menu-close"></div>
-              <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2">
-                <li class="u-nav-item"><a
-                    class="u-button-style u-nav-link u-text-active-white u-text-grey-90 u-text-hover-white"
-                    href="./">Главная</a></li>
-                <li class="u-nav-item"><a
-                    class="u-button-style u-nav-link u-text-active-white u-text-grey-90 u-text-hover-white"
-                    href="О-нас.html">О нас</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
-        </div>
-      </nav>
     </div>
   </header>
   <section
@@ -110,6 +66,11 @@
                 data-animation-name="fadeIn" data-animation-duration="1000" data-animation-direction="Up"
                 data-animation-delay="500">Получить первое занятие<br>&nbsp;бесплатно
               </a>
+              <button onclick="openTestModal(); return false;"
+                class="u-border-none u-btn u-btn-round u-button-style u-palette-2-base u-radius-10 u-text-palette-1-base u-btn-2"
+                data-animation-name="fadeIn" data-animation-duration="1000" data-animation-direction="Up"
+                data-animation-delay="600" style="margin-top: 15px; background: #d5e76c;">Проверить уровень<br>&nbsp;английского ученика
+              </button>
             </div>
           </div>
           <div
@@ -320,6 +281,128 @@
     </section> -->
 
   <script defer>
+    var testQuestions = [];
+    var currentQuestionIndex = 0;
+    var userAnswers = [];
+    
+    // Загружаем вопросы теста
+    fetch('english_level_test.json')
+      .then(response => response.json())
+      .then(data => {
+        testQuestions = data;
+        console.log('Test questions loaded:', testQuestions);
+      })
+      .catch(error => console.error('Error loading test:', error));
+
+    function openModal() {
+      document.getElementById('modal').style.display = 'block';
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+    }
+
+    function openTestModal() {
+      currentQuestionIndex = 0;
+      userAnswers = [];
+      displayQuestion();
+      document.getElementById('testModal').style.display = 'block';
+    }
+
+    function closeTestModal() {
+      document.getElementById('testModal').style.display = 'none';
+    }
+
+    function displayQuestion() {
+      var testContent = document.getElementById('testContent');
+      var questionNum = currentQuestionIndex + 1;
+      
+      if (currentQuestionIndex >= 24) {
+        showTestResults();
+        return;
+      }
+
+      var questionKey = 'question_' + questionNum;
+      var question = testQuestions[questionKey];
+      
+      if (!question) {
+        showTestResults();
+        return;
+      }
+
+      var optionsHtml = '';
+      for (var i = 1; i <= 5; i++) {
+        var optionKey = questionKey + '_variant_' + i;
+        var optionText = testQuestions[optionKey];
+        optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;">' + optionText + '</label></div>';
+      }
+
+      testContent.innerHTML = '<div style="max-height: 60vh; overflow-y: auto;"><h4 style="margin-bottom: 15px;">Вопрос ' + questionNum + ' из 24</h4><p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' + optionsHtml + '<div style="margin-top: 20px;"><button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button><button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button></div></div>';
+    }
+
+    function nextQuestion() {
+      var selected = document.querySelector('input[name="answer"]:checked');
+      if (!selected) {
+        alert('Выберите вариант ответа');
+        return;
+      }
+      
+      var questionNum = currentQuestionIndex + 1;
+      var questionKey = 'question_' + questionNum;
+      var correctAnswer = testQuestions[questionKey + '_correct_variant'];
+      
+      userAnswers[currentQuestionIndex] = {
+        question: questionNum,
+        answer: parseInt(selected.value),
+        correct: correctAnswer
+      };
+      
+      currentQuestionIndex++;
+      displayQuestion();
+    }
+
+    function skipQuestion() {
+      var questionNum = currentQuestionIndex + 1;
+      var questionKey = 'question_' + questionNum;
+      var correctAnswer = testQuestions[questionKey + '_correct_variant'];
+      
+      userAnswers[currentQuestionIndex] = {
+        question: questionNum,
+        answer: 0,
+        correct: correctAnswer
+      };
+      
+      currentQuestionIndex++;
+      displayQuestion();
+    }
+
+    function showTestResults() {
+      var correctCount = 0;
+      for (var i = 0; i < userAnswers.length; i++) {
+        if (userAnswers[i].answer === userAnswers[i].correct) {
+          correctCount++;
+        }
+      }
+
+      var level = '';
+      if (correctCount <= 12) {
+        level = 'нулевой';
+      } else if (correctCount <= 18) {
+        level = 'начальный';
+      } else {
+        level = 'продолжающий';
+      }
+
+      var testContent = document.getElementById('testContent');
+      testContent.innerHTML = '<div style="text-align: center;"><h3>Результат теста</h3><p style="font-size: 18px; margin: 20px 0;">Вы ответили правильно: <strong>' + correctCount + '</strong> из <strong>24</strong> вопросов</p><p style="font-size: 20px; margin: 20px 0; color: #2799b1;"><strong>Ваш уровень: ' + level + '</strong></p><button onclick="openFormWithLevel(\'' + level + '\')" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Получить первое занятие бесплатно</button><button onclick="closeTestModal()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Закрыть</button></div>';
+    }
+
+    function openFormWithLevel(level) {
+      closeTestModal();
+      document.getElementById('englishLevel').value = level;
+      openModal();
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
       console.log('Script loaded');
       var buttons = document.querySelectorAll('.u-btn');
@@ -331,7 +414,7 @@
           btn.addEventListener('click', function (e) {
             e.preventDefault();
             console.log('Button clicked, showing modal');
-            document.getElementById('modal').style.display = 'block';
+            openModal();
           });
         }
       });
@@ -355,7 +438,7 @@
       }
 
       document.getElementById('cancel').addEventListener('click', function () {
-        document.getElementById('modal').style.display = 'none';
+        closeModal();
       });
 
       document.getElementById('submit').addEventListener('click', function () {
@@ -366,7 +449,7 @@
         }
         // Здесь можно добавить отправку данных на сервер
         alert('Спасибо! Ваши данные отправлены. Менеджер свяжется с вами для организации первого бесплатного занятия.');
-        document.getElementById('modal').style.display = 'none';
+        closeModal();
         // Очистить форму
         document.getElementById('contactForm').reset();
       });
@@ -374,14 +457,19 @@
       // Закрытие модала по клику на overlay
       document.getElementById('modal').addEventListener('click', function (e) {
         if (e.target === this) {
-          this.style.display = 'none';
+          closeModal();
+        }
+      });
+
+      document.getElementById('testModal').addEventListener('click', function (e) {
+        if (e.target === this) {
+          closeTestModal();
         }
       });
     });
   </script>
-  </script>
 
-  <!-- Modal -->
+  <!-- Contact Modal -->
   <div id="modal"
     style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
     <div class="modal-content"
@@ -393,17 +481,26 @@
         <input type="tel" id="phone" class="u-input u-radius-5" required
           style="width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: 'Open Sans', sans-serif;">
 
+        <label for="englishLevel" class="u-text u-text-2" style="display: block; margin-bottom: 5px;">Уровень английского</label>
+        <select id="englishLevel" class="u-input u-radius-5"
+          style="width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: 'Open Sans', sans-serif;">
+          <option value="">Выберите уровень</option>
+          <option value="нулевой">Нулевой</option>
+          <option value="начальный">Начальный</option>
+          <option value="продолжающий">Продолжающий</option>
+        </select>
+
         <p class="u-text u-text-2" style="margin-bottom: 10px;">Выберите в какой соцсети с вами лучше связаться:</p>
 
         <div class="u-form-group">
-          <label for="telegram" class="u-text u-text-2">Telegram</label>
-          <input type="text" id="telegram" placeholder="@username" class="u-input"
+          <label for="telegram" class="u-text u-text-2">Telegram (ссылка на профиль)</label>
+          <input type="text" id="telegram" placeholder="https://t.me/your_username" class="u-input"
             style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: 'Open Sans', sans-serif;">
         </div>
 
         <div class="u-form-group">
-          <label for="vk" class="u-text u-text-2">VK</label>
-          <input type="text" id="vk" placeholder="id или username" class="u-input"
+          <label for="vk" class="u-text u-text-2">VK (ссылка на профиль)</label>
+          <input type="text" id="vk" placeholder="https://vk.com/your_username" class="u-input"
             style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: 'Open Sans', sans-serif;">
         </div>
 
@@ -420,6 +517,15 @@
             style="padding: 10px 20px; margin: 0 5px; background: #2799b1; color: white; border: none; cursor: pointer; font-family: 'Raleway', sans-serif; font-weight: 700; border-radius: 10px;">Отправить</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- Test Modal -->
+  <div id="testModal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001;">
+    <div class="modal-content"
+      style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
+      <div id="testContent"></div>
     </div>
   </div>
 
