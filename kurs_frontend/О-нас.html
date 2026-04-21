@@ -72,13 +72,14 @@
         <input type="tel" id="phone" class="u-input u-radius-5" required
           style="width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: 'Open Sans', sans-serif;">
 
-        <label for="englishLevel" class="u-text u-text-2" style="display: block; margin-bottom: 5px;">Уровень английского</label>
+        <label for="englishLevel" class="u-text u-text-2" style="display: block; margin-bottom: 5px;">Уровень
+          английского</label>
         <select id="englishLevel" class="u-input u-radius-5"
           style="width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: 'Open Sans', sans-serif;">
           <option value="">Выберите уровень</option>
-          <option value="нулевой">Нулевой</option>
-          <option value="начальный">Начальный</option>
-          <option value="продолжающий">Продолжающий</option>
+          <option value="начальный">начальный</option>
+          <option value="продолжающий">продолжающий</option>
+          <option value="продвинутый">продвинутый</option>
         </select>
 
         <p class="u-text u-text-2" style="margin-bottom: 10px;">Выберите в какой соцсети с вами лучше связаться:</p>
@@ -113,9 +114,9 @@
 
   <!-- Test Modal -->
   <div id="testModal"
-    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001;">
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; overflow: hidden;">
     <div class="modal-content"
-      style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
+      style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
       <div id="testContent"></div>
     </div>
   </div>
@@ -124,7 +125,7 @@
     var testQuestions = [];
     var currentQuestionIndex = 0;
     var userAnswers = [];
-    
+
     // Загружаем вопросы теста
     fetch('english_level_test.json')
       .then(response => response.json())
@@ -156,7 +157,7 @@
     function displayQuestion() {
       var testContent = document.getElementById('testContent');
       var questionNum = currentQuestionIndex + 1;
-      
+
       if (currentQuestionIndex >= 24) {
         showTestResults();
         return;
@@ -164,7 +165,7 @@
 
       var questionKey = 'question_' + questionNum;
       var question = testQuestions[questionKey];
-      
+
       if (!question) {
         showTestResults();
         return;
@@ -186,17 +187,17 @@
         alert('Выберите вариант ответа');
         return;
       }
-      
+
       var questionNum = currentQuestionIndex + 1;
       var questionKey = 'question_' + questionNum;
       var correctAnswer = testQuestions[questionKey + '_correct_variant'];
-      
+
       userAnswers[currentQuestionIndex] = {
         question: questionNum,
         answer: parseInt(selected.value),
         correct: correctAnswer
       };
-      
+
       currentQuestionIndex++;
       displayQuestion();
     }
@@ -205,13 +206,13 @@
       var questionNum = currentQuestionIndex + 1;
       var questionKey = 'question_' + questionNum;
       var correctAnswer = testQuestions[questionKey + '_correct_variant'];
-      
+
       userAnswers[currentQuestionIndex] = {
         question: questionNum,
         answer: 0,
         correct: correctAnswer
       };
-      
+
       currentQuestionIndex++;
       displayQuestion();
     }
@@ -226,11 +227,11 @@
 
       var level = '';
       if (correctCount <= 12) {
-        level = 'нулевой';
-      } else if (correctCount <= 18) {
         level = 'начальный';
-      } else {
+      } else if (correctCount <= 18) {
         level = 'продолжающий';
+      } else {
+        level = 'продвинутый';
       }
 
       var testContent = document.getElementById('testContent');
@@ -286,52 +287,52 @@
 </body>
 
 </html>
-      </form>
-    </div>
-  </div>
+</form>
+</div>
+</div>
 
-  <script defer>
-    document.addEventListener('DOMContentLoaded', function () {
-      console.log('Script loaded on О нас');
-      var buttons = document.querySelectorAll('.u-btn');
-      console.log('Buttons found:', buttons.length);
-      buttons.forEach(function (btn, index) {
-        console.log('Button', index, btn.textContent);
-        if (btn.textContent.toLowerCase().includes('бесплатно')) {
-          console.log('Adding listener to button', index);
-          btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            console.log('Button clicked, showing modal');
-            document.getElementById('modal').style.display = 'block';
-          });
-        }
-      });
-
-      document.getElementById('cancel').addEventListener('click', function () {
-        document.getElementById('modal').style.display = 'none';
-      });
-
-      document.getElementById('submit').addEventListener('click', function () {
-        var phone = document.getElementById('phone').value.trim();
-        if (!phone || !/^(\+7|8)?[\s\-]?\(?[0-9]{3}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/.test(phone)) {
-          alert('Пожалуйста, введите корректный номер телефона.');
-          return;
-        }
-        // Здесь можно добавить отправку данных на сервер
-        alert('Спасибо! Ваши данные отправлены. Менеджер свяжется с вами для организации первого бесплатного занятия.');
-        document.getElementById('modal').style.display = 'none';
-        // Очистить форму
-        document.getElementById('contactForm').reset();
-      });
-
-      // Закрытие модала по клику на overlay
-      document.getElementById('modal').addEventListener('click', function (e) {
-        if (e.target === this) {
-          this.style.display = 'none';
-        }
-      });
+<script defer>
+  document.addEventListener('DOMContentLoaded', function () {
+    console.log('Script loaded on О нас');
+    var buttons = document.querySelectorAll('.u-btn');
+    console.log('Buttons found:', buttons.length);
+    buttons.forEach(function (btn, index) {
+      console.log('Button', index, btn.textContent);
+      if (btn.textContent.toLowerCase().includes('бесплатно')) {
+        console.log('Adding listener to button', index);
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          console.log('Button clicked, showing modal');
+          document.getElementById('modal').style.display = 'block';
+        });
+      }
     });
-  </script>
+
+    document.getElementById('cancel').addEventListener('click', function () {
+      document.getElementById('modal').style.display = 'none';
+    });
+
+    document.getElementById('submit').addEventListener('click', function () {
+      var phone = document.getElementById('phone').value.trim();
+      if (!phone || !/^(\+7|8)?[\s\-]?\(?[0-9]{3}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/.test(phone)) {
+        alert('Пожалуйста, введите корректный номер телефона.');
+        return;
+      }
+      // Здесь можно добавить отправку данных на сервер
+      alert('Спасибо! Ваши данные отправлены. Менеджер свяжется с вами для организации первого бесплатного занятия.');
+      document.getElementById('modal').style.display = 'none';
+      // Очистить форму
+      document.getElementById('contactForm').reset();
+    });
+
+    // Закрытие модала по клику на overlay
+    document.getElementById('modal').addEventListener('click', function (e) {
+      if (e.target === this) {
+        this.style.display = 'none';
+      }
+    });
+  });
+</script>
 
 </body>
 

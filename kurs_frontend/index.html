@@ -61,16 +61,18 @@
               <p class="u-text u-text-body-alt-color u-text-2" data-animation-name="fadeIn"
                 data-animation-duration="1000" data-animation-direction="Up" data-animation-delay="250">Платформа "Курс"
                 — онлайн-занятия с опытными преподавателями в небольших группах для школьников всех возрастов.</p>
-              <a href="#"
-                class="u-border-none u-btn u-btn-round u-button-style u-palette-3-base u-radius-10 u-text-palette-1-base u-btn-1"
-                data-animation-name="fadeIn" data-animation-duration="1000" data-animation-direction="Up"
-                data-animation-delay="500">Получить первое занятие<br>&nbsp;бесплатно
-              </a>
-              <button onclick="openTestModal(); return false;"
-                class="u-border-none u-btn u-btn-round u-button-style u-palette-2-base u-radius-10 u-text-palette-1-base u-btn-2"
-                data-animation-name="fadeIn" data-animation-duration="1000" data-animation-direction="Up"
-                data-animation-delay="600" style="margin-top: 15px; background: #d5e76c;">Проверить уровень<br>&nbsp;английского ученика
-              </button>
+              <div style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
+                <a href="#"
+                  class="u-border-none u-btn u-btn-round u-button-style u-palette-3-base u-radius-10 u-text-palette-1-base u-btn-1"
+                  data-animation-name="fadeIn" data-animation-duration="1000" data-animation-direction="Up"
+                  data-animation-delay="500" style="width: 100%; text-align: center;">Получить первое занятие<br>&nbsp;бесплатно
+                </a>
+                <button onclick="openTestModal(); return false;"
+                  class="u-border-none u-btn u-btn-round u-button-style u-palette-3-base u-radius-10 u-text-palette-1-base u-btn-2"
+                  data-animation-name="fadeIn" data-animation-duration="1000" data-animation-direction="Up"
+                  data-animation-delay="600" style="width: 100%; text-align: center;">Проверить уровень<br>&nbsp;английского
+                </button>
+              </div>
             </div>
           </div>
           <div
@@ -284,7 +286,7 @@
     var testQuestions = [];
     var currentQuestionIndex = 0;
     var userAnswers = [];
-    
+
     // Загружаем вопросы теста
     fetch('english_level_test.json')
       .then(response => response.json())
@@ -316,7 +318,7 @@
     function displayQuestion() {
       var testContent = document.getElementById('testContent');
       var questionNum = currentQuestionIndex + 1;
-      
+
       if (currentQuestionIndex >= 24) {
         showTestResults();
         return;
@@ -324,7 +326,7 @@
 
       var questionKey = 'question_' + questionNum;
       var question = testQuestions[questionKey];
-      
+
       if (!question) {
         showTestResults();
         return;
@@ -346,17 +348,17 @@
         alert('Выберите вариант ответа');
         return;
       }
-      
+
       var questionNum = currentQuestionIndex + 1;
       var questionKey = 'question_' + questionNum;
       var correctAnswer = testQuestions[questionKey + '_correct_variant'];
-      
+
       userAnswers[currentQuestionIndex] = {
         question: questionNum,
         answer: parseInt(selected.value),
         correct: correctAnswer
       };
-      
+
       currentQuestionIndex++;
       displayQuestion();
     }
@@ -365,13 +367,13 @@
       var questionNum = currentQuestionIndex + 1;
       var questionKey = 'question_' + questionNum;
       var correctAnswer = testQuestions[questionKey + '_correct_variant'];
-      
+
       userAnswers[currentQuestionIndex] = {
         question: questionNum,
         answer: 0,
         correct: correctAnswer
       };
-      
+
       currentQuestionIndex++;
       displayQuestion();
     }
@@ -386,11 +388,11 @@
 
       var level = '';
       if (correctCount <= 12) {
-        level = 'нулевой';
-      } else if (correctCount <= 18) {
         level = 'начальный';
-      } else {
+      } else if (correctCount <= 18) {
         level = 'продолжающий';
+      } else {
+        level = 'продвинутый';
       }
 
       var testContent = document.getElementById('testContent');
@@ -481,13 +483,14 @@
         <input type="tel" id="phone" class="u-input u-radius-5" required
           style="width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: 'Open Sans', sans-serif;">
 
-        <label for="englishLevel" class="u-text u-text-2" style="display: block; margin-bottom: 5px;">Уровень английского</label>
+        <label for="englishLevel" class="u-text u-text-2" style="display: block; margin-bottom: 5px;">Уровень
+          английского</label>
         <select id="englishLevel" class="u-input u-radius-5"
           style="width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: 'Open Sans', sans-serif;">
           <option value="">Выберите уровень</option>
-          <option value="нулевой">Нулевой</option>
-          <option value="начальный">Начальный</option>
-          <option value="продолжающий">Продолжающий</option>
+          <option value="начальный">начальный</option>
+          <option value="продолжающий">продолжающий</option>
+          <option value="продвинутый">продвинутый</option>
         </select>
 
         <p class="u-text u-text-2" style="margin-bottom: 10px;">Выберите в какой соцсети с вами лучше связаться:</p>
@@ -522,9 +525,9 @@
 
   <!-- Test Modal -->
   <div id="testModal"
-    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001;">
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; overflow: hidden;">
     <div class="modal-content"
-      style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
+      style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
       <div id="testContent"></div>
     </div>
   </div>
