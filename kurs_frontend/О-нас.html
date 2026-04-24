@@ -178,7 +178,17 @@
         optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;">' + optionText + '</label></div>';
       }
 
-      testContent.innerHTML = '<div style="max-height: 60vh; overflow-y: auto;"><h4 style="margin-bottom: 15px;">Вопрос ' + questionNum + ' из 24</h4><p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' + optionsHtml + '<div style="margin-top: 20px;"><button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button><button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button></div></div>';
+      var navButtons = '<div style="margin-top: 20px;"><button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px;">Далее</button></div>';
+
+      var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
+
+      testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
+        closeButton +
+        '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
+        '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
+        optionsHtml +
+        navButtons +
+        '</div>';
     }
 
     function nextQuestion() {
