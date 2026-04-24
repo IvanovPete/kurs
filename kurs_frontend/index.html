@@ -3007,7 +3007,97 @@
 
       function prevQuestion() {
         if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
+         function displayQuestion() {
+      var testContent = document.getElementById('testContent');
+      var questionNum = currentQuestionIndex + 1;
+
+      if (currentQuestionIndex >= 24) {
+        showTestResults();
+        return;
+      }
+
+      var questionKey = 'question_' + questionNum;
+      var question = testQuestions[questionKey];
+
+      if (!question) {
+        showTestResults();
+        return;
+      }
+
+      var optionsHtml = '';
+      for (var i = 1; i <= 5; i++) {
+        var optionKey = questionKey + '_variant_' + i;
+        var optionText = testQuestions[optionKey];
+        // Проверяем, был ли ранее выбран этот вариант
+        var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
+        optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
+      }
+
+      // Создаем кнопки навигации
+      var navButtons = '<div style="margin-top: 20px;">';
+      
+      // Кнопка "Назад" только если не первый вопрос
+      if (currentQuestionIndex > 0) {
+        navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
+      }
+      
+      navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
+      navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
+      navButtons += '</div>';
+
+      // Добавляем крестик закрытия
+      var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
+
+      testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' + 
+        closeButton +
+        '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
+        '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' + 
+        optionsHtml + 
+        navButtons + 
+        '</div>';
+    }
+
+    function prevQuestion() {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        displayQuestion();
+      }
+    }
+
+    function nextQuestion() {
+      var selected = document.querySelector('input[name="answer"]:checked');
+      
+      // Сохраняем ответ (даже если не выбран - это будет 0)
+      var answerValue = selected ? parseInt(selected.value) : 0;
+      
+      var questionNum = currentQuestionIndex + 1;
+      var questionKey = 'question_' + questionNum;
+      var correctAnswer = testQuestions[questionKey + '_correct_variant'];
+
+      userAnswers[currentQuestionIndex] = {
+        question: questionNum,
+        answer: answerValue,
+        correct: correctAnswer
+      };
+
+      currentQuestionIndex++;
+      displayQuestion();
+    }
+
+    function skipQuestion() {
+      var questionNum = currentQuestionIndex + 1;
+      var questionKey = 'question_' + questionNum;
+      var correctAnswer = testQuestions[questionKey + '_correct_variant'];
+
+      userAnswers[currentQuestionIndex] = {
+        question: questionNum,
+        answer: 0,
+        correct: correctAnswer
+      };
+
+      currentQuestionIndex++;
+      displayQuestion();
+    }     currentQuestionIndex--;
           displayQuestion();
         }
       }
