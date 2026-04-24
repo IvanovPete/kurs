@@ -138,6 +138,17 @@
    margin: 21px 50px 0 21px;
  }
 
+ .buttons-container {
+   display: flex;
+   flex-direction: row;
+   flex-wrap: wrap;
+   gap: 15px;
+   width: 100%;
+   justify-content: flex-start;
+   align-items: center;
+   margin: 35px 0 0 21px;
+ }
+
  .u-section-1 .u-btn-1 {
    background-image: none;
    border-style: none;
@@ -145,8 +156,24 @@
    letter-spacing: 2px;
    text-transform: uppercase;
    font-weight: 700;
-   margin: 35px auto 0 21px;
    padding: 15px 44px 17px;
+   margin: 0;
+   min-width: 200px;
+   text-align: center;
+ }
+
+ .u-section-1 .u-btn-2 {
+   background-image: none;
+   border-style: none;
+   font-size: 1rem;
+   letter-spacing: 2px;
+   text-transform: uppercase;
+   font-weight: 700;
+   padding: 15px 44px 17px;
+   margin: 0;
+   min-width: 200px;
+   text-align: center;
+   color: #2799b1 !important;
  }
 
  .u-section-1 .u-image-1 {
@@ -181,10 +208,6 @@
 
    .u-section-1 .u-text-2 {
      margin-right: 5px;
-     margin-left: 0;
-   }
-
-   .u-section-1 .u-btn-1 {
      margin-left: 0;
    }
 
@@ -286,8 +309,9 @@
      margin-right: 60px;
    }
 
-   .u-section-1 .u-btn-1 {
-     margin-top: 69px;
+   .buttons-container {
+     margin-top: 20px;
+     margin-left: 0;
    }
 
    .u-section-1 .u-image-1 {
