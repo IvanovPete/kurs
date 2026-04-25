@@ -32,18 +32,18 @@ def register_data(request):
 
 def download_user_agreement(request):
     """Скачать пользовательское соглашение"""
-    file_path = os.path.join(settings.BASE_DIR, 'documents', 'user_agreement.docx')
-    return _download_file(file_path, 'user_agreement.docx')
+    file_path = os.path.join(settings.BASE_DIR, 'documents', 'Пользовательское соглашение.docx')
+    return _download_file(file_path, 'Пользовательское соглашение.docx')
 
 def download_consent(request):
     """Скачать согласие на обработку"""
-    file_path = os.path.join(settings.BASE_DIR, 'documents', 'consent.docx')
-    return _download_file(file_path, 'consent.docx')
+    file_path = os.path.join(settings.BASE_DIR, 'documents', 'Согласие на обработку персональных данных.docx')
+    return _download_file(file_path, 'Согласие на обработку персональных данных.docx')
 
 def download_privacy_policy(request):
     """Скачать политику конфиденциальности"""
-    file_path = os.path.join(settings.BASE_DIR, 'documents', 'privacy_policy.docx')
-    return _download_file(file_path, 'privacy_policy.docx')
+    file_path = os.path.join(settings.BASE_DIR, 'documents', 'Политика конфиденциальности.docx')
+    return _download_file(file_path, 'Политика конфиденциальности.docx')
 
 def _download_file(file_path, filename):
     """Вспомогательная функция для скачивания файла"""
