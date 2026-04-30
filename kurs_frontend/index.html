@@ -289,9 +289,9 @@
 
   <!-- Modal -->
   <div id="modal"
-    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; overflow-y: auto; padding: 20px 0;">
     <div class="modal-content"
-      style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 500px; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
+      style="position: relative; margin: 5% auto; top: auto; left: auto; transform: none; background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 500px; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
       <p class="u-custom-font u-text u-text-1" style="text-align: center; margin-bottom: 20px;">Заполните данные для
         того, чтобы наш менеджер мог связаться с вами и получите первое занятие БЕСПЛАТНО!</p>
       <form id="contactForm">
@@ -532,18 +532,25 @@
           return;
         }
 
-        var formData = new FormData();
-        formData.append('phone', phone);
-        formData.append('telegram', document.getElementById('telegram').value.trim());
-        formData.append('vk', document.getElementById('vk').value.trim());
-        formData.append('yandex', document.getElementById('yandex').value.trim());
-        formData.append('age', document.getElementById('age').value.trim());
-        formData.append('start_english_level', document.getElementById('englishLevel').value);
+        // Сначала получаем CSRF-токен
+        fetch('http://localhost:8000/api/csrf/', { credentials: 'include' })
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            var formData = new FormData();
+            formData.append('phone', phone);
+            formData.append('telegram', document.getElementById('telegram').value.trim());
+            formData.append('vk', document.getElementById('vk').value.trim());
+            formData.append('yandex', document.getElementById('yandex').value.trim());
+            formData.append('age', document.getElementById('age').value.trim());
+            formData.append('start_english_level', document.getElementById('englishLevel').value);
 
-        fetch('http://localhost:8000/api/register/', {
-          method: 'POST',
-          body: formData
-        })
+            return fetch('http://localhost:8000/api/register/', {
+              method: 'POST',
+              headers: { 'X-CSRFToken': data.csrfToken },
+              credentials: 'include',
+              body: formData
+            });
+          })
           .then(function (response) {
             if (response.ok) {
               alert('Спасибо! Ваши данные отправлены. Менеджер свяжется с вами для организации первого бесплатного занятия.');

@@ -5,14 +5,14 @@ services:
     image: postgres:16-alpine
     container_name: kurs_db
     environment:
-      POSTGRES_DB: kurs_db
-      POSTGRES_USER: kurs_user
-      POSTGRES_PASSWORD: kurs_password
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U kurs_user -d kurs_db" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -36,9 +36,9 @@ services:
       DJANGO_DEBUG: "False"
       DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,${SERVER_DOMAIN}
       DB_HOST: db
-      DB_NAME: kurs_db
-      DB_USER: kurs_user
-      DB_PASSWORD: kurs_password
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
     ports:
       - "8000:8000"
     depends_on:

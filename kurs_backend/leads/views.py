@@ -1,13 +1,17 @@
 from django.shortcuts import render
-from django.http import HttpResponse, Http404
-from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse, Http404, JsonResponse
 from django.views.decorators.http import require_http_methods
+from django.middleware.csrf import get_token
 import os
 from django.conf import settings
 from .models import Lead
 
 
-@csrf_exempt
+def get_csrf_token(request):
+    """Возвращает CSRF-токен для кросс-доменных запросов"""
+    return JsonResponse({'csrfToken': get_token(request)})
+
+
 @require_http_methods(["POST"])
 def register_data(request):
     """Принимает данные: телефон (обязательный) и соцсети (необязательные)"""
