@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html style="font-size: 16px;" lang="ru">
 
 <head>
@@ -286,15 +286,77 @@
         data-animation-direction="Up" data-animation-delay="500">Изображения из Freepic</p>
     </div>
   </footer>
-  <!-- <section class="u-backlink u-clearfix u-grey-80"> This <a href="https://nicepage.com/landing-page">Landing Page</a> was created with Nicepage Builder 
-    </section> -->
+
+  <!-- Modal -->
+  <div id="modal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+    <div class="modal-content"
+      style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 500px; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
+      <p class="u-custom-font u-text u-text-1" style="text-align: center; margin-bottom: 20px;">Заполните данные для
+        того, чтобы наш менеджер мог связаться с вами и получите первое занятие БЕСПЛАТНО!</p>
+      <form id="contactForm">
+        <label for="phone" class="u-text u-text-2" style="display: block; margin-bottom: 5px;">Номер телефона *</label>
+        <input type="tel" id="phone" class="u-input u-radius-5" required
+          style="width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: 'Open Sans', sans-serif;">
+
+        <label for="englishLevel" class="u-text u-text-2" style="display: block; margin-bottom: 5px;">Уровень
+          английского</label>
+        <select id="englishLevel" class="u-input u-radius-5"
+          style="width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: 'Open Sans', sans-serif;">
+          <option value="">Выберите уровень</option>
+          <option value="начальный">начальный</option>
+          <option value="продолжающий">продолжающий</option>
+          <option value="продвинутый">продвинутый</option>
+        </select>
+
+        <label for="age" class="u-text u-text-2" style="display: block; margin-bottom: 5px;">Возраст ребёнка</label>
+        <input type="number" id="age" class="u-input u-radius-5" min="1" max="18" placeholder="Например: 10"
+          style="width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: 'Open Sans', sans-serif;">
+
+        <p class="u-text u-text-2" style="margin-bottom: 10px;">Выберите в какой соцсети с вами лучше связаться:</p>
+
+        <div class="u-form-group">
+          <label for="telegram" class="u-text u-text-2">Telegram (ссылка на профиль)</label>
+          <input type="text" id="telegram" placeholder="https://t.me/your_username" class="u-input"
+            style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: 'Open Sans', sans-serif;">
+        </div>
+
+        <div class="u-form-group">
+          <label for="vk" class="u-text u-text-2">VK (ссылка на профиль)</label>
+          <input type="text" id="vk" placeholder="https://vk.com/your_username" class="u-input"
+            style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: 'Open Sans', sans-serif;">
+        </div>
+
+        <div class="u-form-group">
+          <label for="yandex" class="u-text u-text-2">Яндекс Мессенджер</label>
+          <input type="text" id="yandex" placeholder="email или username" class="u-input"
+            style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: 'Open Sans', sans-serif;">
+        </div>
+
+        <div class="u-form-buttons">
+          <button type="button" id="cancel"
+            style="padding: 10px 20px; margin: 0 5px; background: #ccc; border: none; cursor: pointer; font-family: 'Raleway', sans-serif; font-weight: 700; border-radius: 10px;">Отмена</button>
+          <button type="button" id="submit"
+            style="padding: 10px 20px; margin: 0 5px; background: #2799b1; color: white; border: none; cursor: pointer; font-family: 'Raleway', sans-serif; font-weight: 700; border-radius: 10px;">Отправить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Test Modal -->
+  <div id="testModal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; overflow: hidden;">
+    <div class="modal-content"
+      style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
+      <div id="testContent"></div>
+    </div>
+  </div>
 
   <script defer>
     var testQuestions = [];
     var currentQuestionIndex = 0;
     var userAnswers = [];
 
-    // Загружаем вопросы теста
     fetch('english_level_test.json')
       .then(response => response.json())
       .then(data => {
@@ -343,16 +405,34 @@
       for (var i = 1; i <= 5; i++) {
         var optionKey = questionKey + '_variant_' + i;
         var optionText = testQuestions[optionKey];
-        optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;">' + optionText + '</label></div>';
+        if (!optionText) continue;
+        var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
+        optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
       }
 
-      testContent.innerHTML = '<div style="max-height: 60vh; overflow-y: auto;"><h4 style="margin-bottom: 15px;">Вопрос ' + questionNum + ' из 24</h4><p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' + optionsHtml + '<div style="margin-top: 20px;"><button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button><button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button></div></div>';
+      var navButtons = '<div style="margin-top: 20px;">';
+      if (currentQuestionIndex > 0) {
+        navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
+      }
+      navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
+      navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
+      navButtons += '</div>';
+
+      var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">&times;</button></div>';
+
+      testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
+        closeButton +
+        '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
+        '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
+        optionsHtml +
+        navButtons +
+        '</div>';
     }
 
     function nextQuestion() {
       var selected = document.querySelector('input[name="answer"]:checked');
       if (!selected) {
-        alert('Выберите вариант ответа');
+        alert('Ошибка');
         return;
       }
 
@@ -370,1392 +450,127 @@
       displayQuestion();
     }
 
+    function prevQuestion() {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        displayQuestion();
+      }
+    }
+
     function skipQuestion() {
       var questionNum = currentQuestionIndex + 1;
       var questionKey = 'question_' + questionNum;
       var correctAnswer = testQuestions[questionKey + '_correct_variant'];
-      function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
 
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
+      userAnswers[currentQuestionIndex] = {
+        question: questionNum,
+        answer: -1,
+        correct: correctAnswer
+      };
+
+      currentQuestionIndex++;
+      displayQuestion();
+    }
+
+    function showTestResults() {
+      var testContent = document.getElementById('testContent');
+      var correctCount = 0;
+      var totalAnswered = 0;
+
+      for (var i = 0; i < userAnswers.length; i++) {
+        if (userAnswers[i] && userAnswers[i].answer !== -1) {
+          totalAnswered++;
+          if (userAnswers[i].answer === userAnswers[i].correct) {
+            correctCount++;
+          }
         }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
       }
 
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
+      var percentage = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
+      var level = '';
+      if (percentage >= 85) level = 'продвинутый';
+      else if (percentage >= 65) level = 'продолжающий';
+      else level = 'начальный';
 
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
+      var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">&times;</button></div>';
+
+      testContent.innerHTML = '<div style="position: relative; padding: 30px; text-align: center;">' +
+        closeButton +
+        '<h3 style="margin-bottom: 20px; color: #2799b1;">Тест завершен!</h3>' +
+        '<p style="font-size: 18px; margin: 10px 0;">Правильных ответов: <strong>' + correctCount + ' из ' + totalAnswered + '</strong></p>' +
+        '<p style="font-size: 18px; margin: 10px 0;">Процент правильных: <strong>' + percentage + '%</strong></p>' +
+        '<p style="font-size: 18px; margin: 20px 0; padding: 15px; background: #e8f5e9; border-radius: 10px;">Ваш уровень: <strong>' + level + '</strong></p>' +
+        '<button onclick="openFormWithLevel(\'' + level + '\')" style="padding: 12px 30px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; font-size: 16px; margin-bottom: 10px;">Записаться на пробное занятие бесплатно</button>' +
+        '</div>';
+    }
+
+    function openFormWithLevel(level) {
+      closeTestModal();
+      document.getElementById('englishLevel').value = level;
+      openModal();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var buttons = document.querySelectorAll('.u-btn');
+      buttons.forEach(function (btn) {
+        if (btn.textContent.toLowerCase().includes('бесплатно')) {
+          btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            openModal();
+          });
+        }
+      });
+
+      document.getElementById('cancel').addEventListener('click', function () {
+        closeModal();
+      });
+
+      document.getElementById('submit').addEventListener('click', function () {
+        var phone = document.getElementById('phone').value.trim();
+        if (!phone || !/^(\+7|8)?[\s\-]?\(?[0-9]{3}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/.test(phone)) {
+          alert('Пожалуйста, введите корректный номер телефона.');
           return;
         }
 
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNum;
-        var question = testQuestions[questionKey];
-
-        if (!question) {
-          showTestResults();
-          return;
-        }
-
-        var optionsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-          var optionKey = questionKey + '_variant_' + i;
-          var optionText = testQuestions[optionKey];
-          // Проверяем, был ли ранее выбран этот вариант
-          var isChecked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].answer === i ? 'checked' : '';
-          optionsHtml += '<div style="margin: 10px 0;"><label style="cursor: pointer;"><input type="radio" name="answer" value="' + i + '" style="margin-right: 10px;" ' + isChecked + '>' + optionText + '</label></div>';
-        }
-
-        // Создаем кнопки навигации
-        var navButtons = '<div style="margin-top: 20px;">';
-
-        // Кнопка "Назад" только если не первый вопрос
-        if (currentQuestionIndex > 0) {
-          navButtons += '<button onclick="prevQuestion()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Назад</button>';
-        }
-
-        navButtons += '<button onclick="nextQuestion()" style="padding: 10px 20px; background: #2799b1; color: white; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Далее</button>';
-        navButtons += '<button onclick="skipQuestion()" style="padding: 10px 20px; background: #ccc; border: none; cursor: pointer; border-radius: 5px;">Пропустить</button>';
-        navButtons += '</div>';
-
-        // Добавляем крестик закрытия
-        var closeButton = '<div style="position: absolute; top: 15px; right: 15px;"><button onclick="closeTestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 5px; line-height: 1; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s;">×</button></div>';
-
-        testContent.innerHTML = '<div style="position: relative; max-height: 60vh; overflow-y: auto; padding: 20px;">' +
-          closeButton +
-          '<h4 style="margin-bottom: 15px; margin-top: 10px;">Вопрос ' + questionNum + ' из 24</h4>' +
-          '<p style="margin-bottom: 20px; font-weight: bold;">' + question + '</p>' +
-          optionsHtml +
-          navButtons +
-          '</div>';
-      }
-
-      function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          displayQuestion();
-        }
-      } function displayQuestion() {
-        var testContent = document.getElementById('testContent');
-        var questionNum = currentQuestionIndex + 1;
-
-        if (currentQuestionIndex >= 24) {
-          showTestResults();
-          return;
-        }
-
-        var questionKey = 'question_' + questionNu
+        var formData = new FormData();
+        formData.append('phone', phone);
+        formData.append('telegram', document.getElementById('telegram').value.trim());
+        formData.append('vk', document.getElementById('vk').value.trim());
+        formData.append('yandex', document.getElementById('yandex').value.trim());
+        formData.append('age', document.getElementById('age').value.trim());
+        formData.append('start_english_level', document.getElementById('englishLevel').value);
+
+        fetch('http://localhost:8000/api/register/', {
+          method: 'POST',
+          body: formData
+        })
+          .then(function (response) {
+            if (response.ok) {
+              alert('Спасибо! Ваши данные отправлены. Менеджер свяжется с вами для организации первого бесплатного занятия.');
+              closeModal();
+              document.getElementById('contactForm').reset();
+            } else {
+              alert('Произошла ошибка при отправке. Попробуйте ещё раз.');
+            }
+          })
+          .catch(function () {
+            alert('Не удалось отправить данные. Проверьте подключение к интернету.');
+          });
+      });
+
+      document.getElementById('modal').addEventListener('click', function (e) {
+        if (e.target === this) {
+          closeModal();
+        }
+      });
+
+      document.getElementById('testModal').addEventListener('click', function (e) {
+        if (e.target === this) {
+          closeTestModal();
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
