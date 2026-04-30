@@ -5,39 +5,56 @@ services:
     image: postgres:16-alpine
     container_name: kurs_db
     environment:
-      - POSTGRES_DB=kurs_db
-      - POSTGRES_USER=kurs_user
-      - POSTGRES_PASSWORD=kurs_password
+      POSTGRES_DB: kurs_db
+      POSTGRES_USER: kurs_user
+      POSTGRES_PASSWORD: kurs_password
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U kurs_user -d kurs_db"]
+      test: [ "CMD-SHELL", "pg_isready -U kurs_user -d kurs_db" ]
       interval: 5s
       timeout: 5s
       retries: 5
 
+  # -------------------- Backend --------------------
   backend:
-    image: ${DOCKER_USERNAME}/kurs-backend:latest
+    build:
+      context: ./kurs_backend
+      dockerfile: Dockerfile
     container_name: kurs_backend
+    # Применяем миграции, создаём супер‑пользователя (admin/admin) и запускаем сервер
+    command: >
+      sh -c "
+        python manage.py migrate &&
+        python manage.py createsuperuser --no-input --username admin --email admin@example.com ||
+        true &&
+        python manage.py runserver 0.0.0.0:8000
+      "
     environment:
-      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
-      - DJANGO_DEBUG=False
-      - DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,${SERVER_DOMAIN}
-      - DB_HOST=db
-      - DB_NAME=kurs_db
-      - DB_USER=kurs_user
-      - DB_PASSWORD=kurs_password
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      DJANGO_DEBUG: "False"
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,${SERVER_DOMAIN}
+      DB_HOST: db
+      DB_NAME: kurs_db
+      DB_USER: kurs_user
+      DB_PASSWORD: kurs_password
+    ports:
+      - "8000:8000"
     depends_on:
       db:
         condition: service_healthy
     restart: unless-stopped
 
-  nginx:
-    image: ${DOCKER_USERNAME}/kurs-nginx:latest
-    container_name: kurs_nginx
+  # -------------------- Frontend --------------------
+  frontend:
+    build:
+      context: ./kurs_frontend
+      dockerfile: Dockerfile
+    container_name: kurs_frontend
+    # Nginx inside the container listens on port 80, so expose it as 8080 on host
     ports:
-      - "80:80"
+      - "8080:80"
     depends_on:
       - backend
     restart: unless-stopped

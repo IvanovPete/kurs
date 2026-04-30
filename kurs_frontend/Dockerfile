@@ -1,7 +1,9 @@
+# Simple Nginx image that directly serves the static files present in this folder.
 FROM nginx:alpine
 
-# Копируем файлы фронта
+# Copy everything (HTML/CSS/JS) into the default nginx html directory.
 COPY . /usr/share/nginx/html
 
-# Копируем конфиг nginx
+# Optional custom nginx config (if the file exists in the project root)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+
