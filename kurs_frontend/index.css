@@ -125,6 +125,10 @@
    padding: 40px 0;
  }
 
+ .u-section-1 .u-container-layout-1>div[style*="display: flex"] {
+   margin-left: 21px;
+ }
+
  .u-section-1 .u-text-1 {
    font-family: "397-font";
    margin: 100px -222px 0 21px;
@@ -135,7 +139,8 @@
    line-height: 1.8;
    font-weight: 700;
    font-size: 1rem;
-   margin: 21px 50px 0 21px;
+   margin: 21px 0 0 21px;
+   text-align: left;
  }
 
  .buttons-container {
@@ -303,10 +308,14 @@
    .u-section-1 .u-text-1 {
      margin-top: 0;
      margin-right: 60px;
+     margin-left: 21px;
+     text-align: left;
    }
 
    .u-section-1 .u-text-2 {
      margin-right: 60px;
+     margin-left: 21px;
+     text-align: left;
    }
 
    .buttons-container {
@@ -320,6 +329,25 @@
 
    .u-section-1 .u-container-layout-2 {
      padding-bottom: 4px;
+   }
+
+   /* Кнопки: меньшая ширина, выровнены влево */
+   .u-section-1 .u-container-layout-1>div[style*="display: flex"] {
+     padding-left: 21px;
+     padding-right: 21px;
+   }
+
+   .u-section-1 .u-container-layout-1>div[style*="display: flex"] .u-btn-1,
+   .u-section-1 .u-container-layout-1>div[style*="display: flex"] .u-btn-2 {
+     width: auto !important;
+     min-width: 0 !important;
+     max-width: 280px;
+     margin-left: 0 !important;
+     margin-right: auto !important;
+     padding-left: 30px !important;
+     padding-right: 30px !important;
+     font-size: 0.85rem !important;
+     letter-spacing: 1px !important;
    }
  }
 
@@ -485,8 +513,12 @@
 
    .u-section-2 .u-btn-1 {
      margin-top: 35px;
-     padding-right: 8px;
-     padding-left: 8px;
+     width: auto !important;
+     max-width: 280px;
+     padding-left: 30px !important;
+     padding-right: 30px !important;
+     font-size: 0.85rem !important;
+     letter-spacing: 1px !important;
    }
  }
 
@@ -910,6 +942,15 @@
      margin-right: -15px;
      margin-left: 35px;
    }
+
+   .u-section-4 .u-btn-1 {
+     width: auto !important;
+     max-width: 280px;
+     padding-left: 30px !important;
+     padding-right: 30px !important;
+     font-size: 0.85rem !important;
+     letter-spacing: 1px !important;
+   }
  }
 
  .u-section-5 .u-sheet-1 {
@@ -1107,8 +1148,12 @@
 
    .u-section-5 .u-btn-1 {
      margin-left: 20px;
-     padding-left: 35px;
-     padding-right: 35px;
+     width: auto !important;
+     max-width: 280px;
+     padding-left: 30px !important;
+     padding-right: 30px !important;
+     font-size: 0.85rem !important;
+     letter-spacing: 1px !important;
      padding-bottom: 16px;
    }
 
@@ -1398,7 +1443,13 @@
    }
 
    .u-section-6 .u-btn-1 {
-     margin: -123px -31px 47px;
+     width: auto !important;
+     max-width: 280px;
+     margin: 30px auto 47px !important;
+     padding-left: 30px !important;
+     padding-right: 30px !important;
+     font-size: 0.85rem !important;
+     letter-spacing: 1px !important;
    }
  }
 
@@ -1640,5 +1691,13 @@
 
    .u-menu-close:after {
      transform: translate(-50%, -50%) rotate(-45deg);
+   }
+ }
+
+ /* Mobile: header logo shift right on small screens */
+ @media (max-width: 575px) {
+   header .u-sheet-1 .u-image-1 {
+     margin-left: auto;
+     margin-right: 21px;
    }
  }
