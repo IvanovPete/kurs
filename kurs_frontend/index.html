@@ -551,7 +551,7 @@
         }
 
         // Сначала получаем CSRF-токен
-        fetch('http://localhost:8000/api/csrf/', { credentials: 'include' })
+        fetch('/api/csrf/', { credentials: 'include' })
           .then(function (r) { return r.json(); })
           .then(function (data) {
             var formData = new FormData();
@@ -562,7 +562,7 @@
             formData.append('age', document.getElementById('age').value.trim());
             formData.append('start_english_level', document.getElementById('englishLevel').value);
 
-            return fetch('http://localhost:8000/api/register/', {
+            return fetch('/api/register/', {
               method: 'POST',
               headers: { 'X-CSRFToken': data.csrfToken },
               credentials: 'include',
