@@ -312,48 +312,14 @@
         того, чтобы наш менеджер мог связаться с вами и получите первое занятие БЕСПЛАТНО!</p>
       <form id="contactForm">
         <label for="phone" class="u-text u-text-2" style="display: block; margin-bottom: 5px;">Номер телефона *</label>
-        <input type="tel" id="phone" class="u-input u-radius-5" required
-          style="width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: 'Open Sans', sans-serif;">
+        <input type="tel" id="phone" class="u-input u-radius-5" required placeholder="+7 (___) ___-__-__"
+          style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: 'Open Sans', sans-serif; font-size: 16px;">
 
-        <label for="englishLevel" class="u-text u-text-2" style="display: block; margin-bottom: 5px;">Уровень
-          английского</label>
-        <select id="englishLevel" class="u-input u-radius-5"
-          style="width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: 'Open Sans', sans-serif;">
-          <option value="">Выберите уровень</option>
-          <option value="начальный">начальный</option>
-          <option value="продолжающий">продолжающий</option>
-          <option value="продвинутый">продвинутый</option>
-        </select>
-
-        <label for="age" class="u-text u-text-2" style="display: block; margin-bottom: 5px;">Возраст ребёнка</label>
-        <input type="number" id="age" class="u-input u-radius-5" min="1" max="18" placeholder="Например: 10"
-          style="width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: 'Open Sans', sans-serif;">
-
-        <p class="u-text u-text-2" style="margin-bottom: 10px;">Выберите в какой соцсети с вами лучше связаться:</p>
-
-        <div class="u-form-group">
-          <label for="telegram" class="u-text u-text-2">Telegram (ссылка на профиль)</label>
-          <input type="text" id="telegram" placeholder="https://t.me/your_username" class="u-input"
-            style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: 'Open Sans', sans-serif;">
-        </div>
-
-        <div class="u-form-group">
-          <label for="vk" class="u-text u-text-2">VK (ссылка на профиль)</label>
-          <input type="text" id="vk" placeholder="https://vk.com/your_username" class="u-input"
-            style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: 'Open Sans', sans-serif;">
-        </div>
-
-        <div class="u-form-group">
-          <label for="yandex" class="u-text u-text-2">Яндекс Мессенджер</label>
-          <input type="text" id="yandex" placeholder="email или username" class="u-input"
-            style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: 'Open Sans', sans-serif;">
-        </div>
-
-        <div class="u-form-buttons">
+        <div class="u-form-buttons" style="text-align: center;">
           <button type="button" id="cancel"
-            style="padding: 10px 20px; margin: 0 5px; background: #ccc; border: none; cursor: pointer; font-family: 'Raleway', sans-serif; font-weight: 700; border-radius: 10px;">Отмена</button>
+            style="padding: 12px 30px; margin: 0 8px; background: #ccc; border: none; cursor: pointer; font-family: 'Raleway', sans-serif; font-weight: 700; border-radius: 10px; font-size: 15px;">Отмена</button>
           <button type="button" id="submit"
-            style="padding: 10px 20px; margin: 0 5px; background: #2799b1; color: white; border: none; cursor: pointer; font-family: 'Raleway', sans-serif; font-weight: 700; border-radius: 10px;">Отправить</button>
+            style="padding: 12px 30px; margin: 0 8px; background: #2799b1; color: white; border: none; cursor: pointer; font-family: 'Raleway', sans-serif; font-weight: 700; border-radius: 10px; font-size: 15px;">Отправить</button>
         </div>
       </form>
     </div>
@@ -520,10 +486,6 @@
         '</div>';
     }
 
-    function openFormWithLevel(level) {
-      closeTestModal();
-      document.getElementById('englishLevel').value = level;
-      openModal();
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -554,11 +516,6 @@
           .then(function (data) {
             var formData = new FormData();
             formData.append('phone', phone);
-            formData.append('telegram', document.getElementById('telegram').value.trim());
-            formData.append('vk', document.getElementById('vk').value.trim());
-            formData.append('yandex', document.getElementById('yandex').value.trim());
-            formData.append('age', document.getElementById('age').value.trim());
-            formData.append('start_english_level', document.getElementById('englishLevel').value);
 
             return fetch('/api/register/', {
               method: 'POST',
