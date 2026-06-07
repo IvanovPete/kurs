@@ -4,7 +4,7 @@ class Lead(models.Model):
     phone = models.CharField('Номер телефона', max_length=20)  # обязательное поле
     
     age = models.CharField('Возраст ребёнка', max_length=10, blank=True, null=True)
-
+    free_lessons = mo
     # Отдельные необязательные поля для каждой соцсети
     telegram = models.CharField('Telegram', max_length=100, blank=True, null=True)
     vk = models.CharField('VK', max_length=100, blank=True, null=True)
