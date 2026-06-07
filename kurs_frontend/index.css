@@ -670,29 +670,6 @@ a {
     font-size: 1rem;
   }
 
-  .cookie-banner {
-    padding: 12px 16px;
-  }
-
-  .cookie-banner-content {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-
-  .cookie-banner-text {
-    font-size: 0.82rem;
-    min-width: unset;
-  }
-
-  .cookie-banner-actions {
-    justify-content: flex-end;
-  }
-
-  .cookie-banner-actions .btn {
-    padding: 8px 16px;
-    font-size: 0.8rem;
-  }
 }
 
 /* ===========================================
@@ -797,85 +774,5 @@ a {
 }
 
 /* ===========================================
-   COOKIE BANNER
+   COOKIE BANNER — удалён (метрика всегда активна)
    =========================================== */
-.cookie-banner {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: #1a1a2e;
-  color: #ccc;
-  z-index: 9999;
-  padding: 16px 20px;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
-  align-items: center;
-  justify-content: center;
-}
-
-.cookie-banner-content {
-  max-width: 1100px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.cookie-banner-text {
-  font-size: 0.9rem;
-  line-height: 1.5;
-  color: #ccc;
-  flex: 1;
-  min-width: 200px;
-}
-
-.cookie-banner-text a {
-  color: #2799b1;
-  text-decoration: underline;
-}
-
-.cookie-banner-text a:hover {
-  color: #d5e76c;
-}
-
-.cookie-banner-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-}
-
-.cookie-banner-actions .btn {
-  padding: 10px 24px;
-  font-size: 0.85rem;
-  white-space: nowrap;
-}
-
-.cookie-close-btn {
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  background: none;
-  border: none;
-  font-size: 26px;
-  cursor: pointer;
-  color: #888;
-  padding: 0;
-  line-height: 1;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  z-index: 10;
-  transition: color 0.2s, background 0.2s;
-}
-
-.cookie-close-btn:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
-}
