@@ -22,15 +22,7 @@ services:
     build:
       context: ./kurs_backend
       dockerfile: Dockerfile
-    container_name: kurs_backend
-    # Применяем миграции, создаём супер‑пользователя (admin/admin) и запускаем сервер
-    command: >
-      sh -c "
-        python manage.py migrate &&
-        python manage.py createsuperuser --no-input --username admin --email admin@example.com ||
-        true &&
-        python manage.py runserver 0.0.0.0:8000
-      "
+    container_name: kurs_backend # Команда берётся из Dockerfile (CMD)
     environment:
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
       DJANGO_DEBUG: "False"
