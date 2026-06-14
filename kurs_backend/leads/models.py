@@ -4,10 +4,17 @@ from django.db import models
 class User(models.Model):
     phone = models.CharField(
         'Номер телефона', max_length=20, blank=True, null=True)
-    email = models.EmailField('Почта', max_length=50, blank=True, null=True)
+    email = models.EmailField('Почта', max_length=100, blank=True, null=True)
     yandex_id = models.CharField('Яндекс ID', max_length=100, unique=True)
     login = models.CharField('Логин', max_length=100, blank=True, null=True)
-
+    first_name = models.CharField('Имя', max_length=100, blank=True, null=True)
+    last_name = models.CharField(
+        'Фамилия', max_length=100, blank=True, null=True)
+    sex = models.CharField('Пол', max_length=10, blank=True, null=True)
+    birthday = models.CharField(
+        'Дата рождения', max_length=20, blank=True, null=True)
+    avatar_url = models.URLField(
+        'Аватар URL', max_length=500, blank=True, null=True)
     age = models.CharField(
         'Возраст ребёнка', max_length=10, blank=True, null=True)
     free_lessons = models.IntegerField(
