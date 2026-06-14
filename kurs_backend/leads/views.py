@@ -63,6 +63,7 @@ def yandex_auth(request):
             'redirect_uri': YANDEX_REDIRECT_URI,
             'response_type': 'code',
             'state': state,
+            'force_confirm': 1,  # Всегда показывать окно подтверждения Яндекса
         })
         yandex_url = 'https://oauth.yandex.ru/authorize?' + params
         return redirect(yandex_url)
