@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Добро пожаловать в Курс!</title>
+  <link rel="stylesheet" href="index.css">
+  <style>
+    .welcome {
+      max-width: 700px;
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+
+    .welcome-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 50px 40px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      text-align: center;
+    }
+
+    .welcome-card h1 {
+      font-size: 1.6rem;
+      color: #2799b1;
+      margin-bottom: 10px;
+    }
+
+    .welcome-card .greeting {
+      font-size: 1.05rem;
+      color: #555;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .welcome-card .greeting strong {
+      color: #2799b1;
+    }
+
+    .gift-list {
+      text-align: left;
+      max-width: 500px;
+      margin: 0 auto 30px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .gift-list li {
+      padding: 10px 0 10px 28px;
+      position: relative;
+      font-size: 0.95rem;
+      color: #333;
+      line-height: 1.5;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .gift-list li:last-child {
+      border-bottom: none;
+    }
+
+    .gift-list li::before {
+      content: "•";
+      position: absolute;
+      left: 8px;
+      color: #2799b1;
+      font-size: 1.3rem;
+      line-height: 1.3;
+    }
+
+    .gift-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .gift-links a {
+      display: inline-block;
+      padding: 10px 24px;
+      background: #eef2f7;
+      border-radius: 8px;
+      color: #2799b1;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .gift-links a:hover {
+      background: #dce3ed;
+    }
+
+    .gift-note {
+      font-size: 0.9rem;
+      color: #777;
+      line-height: 1.6;
+      padding-top: 24px;
+      border-top: 1px solid #e8e8e8;
+    }
+
+    .gift-note a {
+      color: #2799b1;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .gift-note a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <img src="images/kurs_logo.png" alt="Курс логотип" class="logo">
+      <div class="header-right">
+        <div class="avatar-circle">
+          <img src="images/default_avatar.png" alt="Аватар" class="avatar-img">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="welcome">
+    <div class="welcome-card">
+      <h1>Вы вошли на платформу «Курс»!</h1>
+      <p class="greeting">
+        Вы получаете от нас подарок: <strong>первое бесплатное занятие!</strong><br>
+        Скидка <strong>50%</strong> на первый месяц обучения!<br>
+        Месяц бесплатного использования онлайн-ресурса <strong>«ИИ Тема»</strong> — с помощью заданий от нейросети Ваш
+        ребёнок сможет освоить основы английского!
+      </p>
+
+      <ul class="gift-list">
+        <li><strong>Первое занятие бесплатно</strong> — полноценный урок с преподавателем</li>
+        <li><strong>Скидка 50%</strong> на первый месяц обучения в группе</li>
+        <li><strong>Месяц бесплатного доступа</strong> к ресурсу «ИИ Тема» с заданиями от нейросети</li>
+        <li><strong>Полезные материалы и шпаргалки</strong> для изучения английского</li>
+      </ul>
+
+      <div class="gift-links">
+        <a href="/docs/first-lesson/" download>Скачать первый урок английского (Word)</a>
+        <a href="/docs/irregular-verbs/" download>Скачать шпаргалку: неправильные глаголы (Word)</a>
+      </div>
+
+      <div class="gift-note">
+        Для получения подарка Вы можете <a href="https://t.me/ivanov_pete" target="_blank">написать нам</a>,
+        либо дождаться, когда с Вами сам свяжется наш менеджер и уточнит все детали!
+      </div>
+    </div>
+  </section>
+</body>
+
+</html>
