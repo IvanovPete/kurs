@@ -23,7 +23,7 @@ services:
       context: ./kurs_backend
       dockerfile: Dockerfile
     container_name: kurs_backend # Команда берётся из Dockerfile (CMD)
-    environment:
+        environment:
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
       DJANGO_DEBUG: "False"
       DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,${SERVER_DOMAIN}
@@ -31,6 +31,9 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+      YANDEX_CLIENT_ID: ${YANDEX_CLIENT_ID}
+      YANDEX_CLIENT_SECRET: ${YANDEX_CLIENT_SECRET}
+      YANDEX_REDIRECT_URI: ${YANDEX_REDIRECT_URI}
     ports:
       - "8000:8000"
     depends_on:

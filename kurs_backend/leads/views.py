@@ -6,9 +6,11 @@ import os
 import json
 import urllib.request
 import urllib.parse
+import logging
 from django.conf import settings
 from .models import User
 
+logger = logging.getLogger(__name__)
 
 YANDEX_CLIENT_ID = os.environ.get('YANDEX_CLIENT_ID', '')
 YANDEX_CLIENT_SECRET = os.environ.get('YANDEX_CLIENT_SECRET', '')
@@ -74,110 +76,116 @@ def yandex_callback(request):
     """
     Обрабатывает callback от Яндекса после авторизации пользователя.
     """
-    code = request.GET.get('code')
-    state = request.GET.get('state', '')
-    error = request.GET.get('error')
-
-    # Извлекаем mode из state (формат: 'mode=login' или 'mode=register')
-    mode = 'login'
-    if state.startswith('mode='):
-        mode = state.split('mode=', 1)[1]
-
-    if error or not code:
-        return HttpResponse('Авторизация отменена или произошла ошибка', status=400)
-
-    # 1. Обмениваем код на токен
-    token_data = urllib.parse.urlencode({
-        'grant_type': 'authorization_code',
-        'code': code,
-        'client_id': YANDEX_CLIENT_ID,
-        'client_secret': YANDEX_CLIENT_SECRET,
-        'redirect_uri': YANDEX_REDIRECT_URI,
-    }).encode()
-
-    token_req = urllib.request.Request(
-        'https://oauth.yandex.ru/token',
-        data=token_data,
-        headers={'Content-Type': 'application/x-www-form-urlencoded'}
-    )
-
     try:
-        token_resp = urllib.request.urlopen(token_req)
-        token_json = json.loads(token_resp.read())
-        access_token = token_json.get('access_token')
+        code = request.GET.get('code')
+        state = request.GET.get('state', '')
+        error = request.GET.get('error')
+
+        # Извлекаем mode из state (формат: 'mode=login' или 'mode=register')
+        mode = 'login'
+        if state.startswith('mode='):
+            mode = state.split('mode=', 1)[1]
+
+        if error or not code:
+            return HttpResponse('Авторизация отменена или произошла ошибка', status=400)
+
+        # 1. Обмениваем код на токен
+        token_data = urllib.parse.urlencode({
+            'grant_type': 'authorization_code',
+            'code': code,
+            'client_id': YANDEX_CLIENT_ID,
+            'client_secret': YANDEX_CLIENT_SECRET,
+            'redirect_uri': YANDEX_REDIRECT_URI,
+        }).encode()
+
+        token_req = urllib.request.Request(
+            'https://oauth.yandex.ru/token',
+            data=token_data,
+            headers={'Content-Type': 'application/x-www-form-urlencoded'}
+        )
+
+        try:
+            token_resp = urllib.request.urlopen(token_req)
+            token_json = json.loads(token_resp.read())
+            access_token = token_json.get('access_token')
+        except Exception as e:
+            logger.exception('YANDEX_TOKEN_ERROR')
+            return HttpResponse('Ошибка получения токена: ' + str(e), status=400)
+
+        if not access_token:
+            return HttpResponse('Не удалось получить токен', status=400)
+
+        # 2. Получаем информацию о пользователе
+        user_req = urllib.request.Request(
+            'https://login.yandex.ru/info',
+            headers={'Authorization': 'OAuth ' + access_token}
+        )
+
+        try:
+            user_resp = urllib.request.urlopen(user_req)
+            user_info = json.loads(user_resp.read())
+        except Exception as e:
+            logger.exception('YANDEX_USERINFO_ERROR')
+            return HttpResponse('Ошибка получения данных пользователя: ' + str(e), status=400)
+
+        yandex_id = user_info.get('id', '')
+        login = user_info.get('login', '')
+        email = user_info.get('default_email', '')
+        first_name = user_info.get('first_name', '')
+        last_name = user_info.get('last_name', '')
+        sex = user_info.get('sex', '')
+        birthday = user_info.get('birthday', '')
+        phone = user_info.get('default_phone', {}).get('number', '') if isinstance(
+            user_info.get('default_phone'), dict) else ''
+        avatar_url = ''
+        if user_info.get('is_avatar_empty', True) == False and user_info.get('default_avatar_id'):
+            avatar_url = 'https://avatars.yandex.net/get-yapic/' + \
+                user_info.get('default_avatar_id', '') + '/islands-200'
+
+        if not yandex_id:
+            return HttpResponse('Не удалось получить ID пользователя', status=400)
+
+        # 3. Создаём или находим пользователя
+        user, created = User.objects.get_or_create(
+            yandex_id=yandex_id,
+            defaults={
+                'login': login,
+                'email': email,
+                'first_name': first_name,
+                'last_name': last_name,
+                'sex': sex,
+                'birthday': birthday,
+                'phone': phone,
+                'avatar_url': avatar_url,
+                'free_lessons': 1,
+            }
+        )
+
+        if not created:
+            user.login = login
+            user.email = email
+            user.first_name = first_name
+            user.last_name = last_name
+            user.sex = sex
+            user.birthday = birthday
+            if phone:
+                user.phone = phone
+            if avatar_url:
+                user.avatar_url = avatar_url
+            user.save()
+
+        # 4. Сохраняем данные в сессии
+        request.session['yandex_user_id'] = yandex_id
+        request.session['user_login'] = login
+        request.session['user_phone'] = phone
+        request.session['user_name'] = first_name + ' ' + last_name
+
+        # 5. Редиректим на welcome.html
+        frontend_url = 'https://kurs.zapto.org/welcome.html'
+        return redirect(frontend_url)
     except Exception as e:
-        return HttpResponse('Ошибка получения токена: ' + str(e), status=400)
-
-    if not access_token:
-        return HttpResponse('Не удалось получить токен', status=400)
-
-    # 2. Получаем информацию о пользователе
-    user_req = urllib.request.Request(
-        'https://login.yandex.ru/info',
-        headers={'Authorization': 'OAuth ' + access_token}
-    )
-
-    try:
-        user_resp = urllib.request.urlopen(user_req)
-        user_info = json.loads(user_resp.read())
-    except Exception as e:
-        return HttpResponse('Ошибка получения данных пользователя: ' + str(e), status=400)
-
-    yandex_id = user_info.get('id', '')
-    login = user_info.get('login', '')
-    email = user_info.get('default_email', '')
-    first_name = user_info.get('first_name', '')
-    last_name = user_info.get('last_name', '')
-    sex = user_info.get('sex', '')
-    birthday = user_info.get('birthday', '')
-    phone = user_info.get('default_phone', {}).get('number', '') if isinstance(
-        user_info.get('default_phone'), dict) else ''
-    avatar_url = ''
-    if user_info.get('is_avatar_empty', True) == False and user_info.get('default_avatar_id'):
-        avatar_url = 'https://avatars.yandex.net/get-yapic/' + \
-            user_info.get('default_avatar_id', '') + '/islands-200'
-
-    if not yandex_id:
-        return HttpResponse('Не удалось получить ID пользователя', status=400)
-
-    # 3. Создаём или находим пользователя
-    user, created = User.objects.get_or_create(
-        yandex_id=yandex_id,
-        defaults={
-            'login': login,
-            'email': email,
-            'first_name': first_name,
-            'last_name': last_name,
-            'sex': sex,
-            'birthday': birthday,
-            'phone': phone,
-            'avatar_url': avatar_url,
-            'free_lessons': 1,
-        }
-    )
-
-    if not created:
-        user.login = login
-        user.email = email
-        user.first_name = first_name
-        user.last_name = last_name
-        user.sex = sex
-        user.birthday = birthday
-        if phone:
-            user.phone = phone
-        if avatar_url:
-            user.avatar_url = avatar_url
-        user.save()
-
-    # 4. Сохраняем данные в сессии
-    request.session['yandex_user_id'] = yandex_id
-    request.session['user_login'] = login
-    request.session['user_phone'] = phone
-    request.session['user_name'] = first_name + ' ' + last_name
-
-    # 5. Редиректим на welcome.html
-    frontend_url = 'https://kurs.zapto.org/welcome.html'
-    return redirect(frontend_url)
+        logger.exception('YANDEX_CALLBACK_CRITICAL_ERROR')
+        return HttpResponse('Внутренняя ошибка сервера: ' + str(e), status=500)
 
 
 def get_user_info(request):
