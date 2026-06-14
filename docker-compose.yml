@@ -23,7 +23,7 @@ services:
       context: ./kurs_backend
       dockerfile: Dockerfile
     container_name: kurs_backend # Команда берётся из Dockerfile (CMD)
-        environment:
+    environment:
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
       DJANGO_DEBUG: "False"
       DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,${SERVER_DOMAIN}
