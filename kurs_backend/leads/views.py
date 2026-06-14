@@ -50,16 +50,17 @@ def register_data(request):
 def yandex_auth(request):
     """
     Редиректит пользователя на страницу авторизации Яндекса.
-    Принимает параметр ?mode=login или ?mode=register (опционально).
     """
     try:
         mode = request.GET.get('mode', 'login')
-        callback_url = YANDEX_REDIRECT_URI + '?mode=' + mode
+        # Передаём mode через state (Яндекс не поддерживает кастомные query параметры в redirect_uri)
+        state = 'mode=' + mode
 
         params = urllib.parse.urlencode({
             'client_id': YANDEX_CLIENT_ID,
-            'redirect_uri': callback_url,
+            'redirect_uri': YANDEX_REDIRECT_URI,
             'response_type': 'code',
+            'state': state,
         })
         yandex_url = 'https://oauth.yandex.ru/authorize?' + params
         return redirect(yandex_url)
@@ -74,20 +75,24 @@ def yandex_callback(request):
     Обрабатывает callback от Яндекса после авторизации пользователя.
     """
     code = request.GET.get('code')
-    mode = request.GET.get('mode', 'login')
+    state = request.GET.get('state', '')
     error = request.GET.get('error')
+
+    # Извлекаем mode из state (формат: 'mode=login' или 'mode=register')
+    mode = 'login'
+    if state.startswith('mode='):
+        mode = state.split('mode=', 1)[1]
 
     if error or not code:
         return HttpResponse('Авторизация отменена или произошла ошибка', status=400)
 
     # 1. Обмениваем код на токен
-    callback_url = YANDEX_REDIRECT_URI + '?mode=' + mode
     token_data = urllib.parse.urlencode({
         'grant_type': 'authorization_code',
         'code': code,
         'client_id': YANDEX_CLIENT_ID,
         'client_secret': YANDEX_CLIENT_SECRET,
-        'redirect_uri': callback_url,
+        'redirect_uri': YANDEX_REDIRECT_URI,
     }).encode()
 
     token_req = urllib.request.Request(
