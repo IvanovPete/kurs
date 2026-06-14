@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:13-alpine
+    image: postgres:16-alpine
     container_name: kurs_db
     environment:
       POSTGRES_DB: ${DB_NAME}
@@ -10,7 +10,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
       interval: 5s
       timeout: 5s
       retries: 5
