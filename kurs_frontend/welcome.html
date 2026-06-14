@@ -2,6 +2,22 @@
 <html lang="ru">
 
 <head>
+  
+  <!-- Yandex.Metrika counter -->
+  <script type="text/javascript">
+    (function (m, e, t, r, i, k, a) {
+      m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) };
+      m[i].l = 1 * new Date();
+      for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } }
+      k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+    })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js?id=108667371", "ym");
+    // Metrika init — всегда активна
+  </script>
+  <noscript>
+    <div><img src="https://mc.yandex.ru/watch/108667371" style="position:absolute; left:-9999px;" alt="" /></div>
+  </noscript>
+  <!-- /Yandex.Metrika counter -->
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Добро пожаловать в Курс!</title>
@@ -194,7 +210,7 @@
     <div class="container header-inner">
       <img src="images/kurs_logo.png" alt="Курс логотип" class="logo">
       <div class="header-right">
-        <div class="avatar-circle" onclick="openModal()">
+        <div class="avatar-circle">
           <img src="images/default_avatar.png" alt="Аватар" class="avatar-img" id="avatarImg">
         </div>
       </div>
@@ -212,7 +228,7 @@
         <li><strong>Первое занятие бесплатно</strong> — полноценный урок с преподавателем</li>
         <li><strong>Скидка 50%</strong> на первый месяц обучения</li>
         <li><strong>Месяц бесплатного доступа</strong> к ресурсу «ИИ Тема» — с помощью заданий от нейросети Ваш
-        ребёнок сможет освоить основы английского!</li>
+          ребёнок сможет освоить основы английского!</li>
         <li><strong>Полезные материалы и шпаргалки</strong> для изучения английского</li>
       </ul>
 
@@ -241,7 +257,8 @@
     <div class="modal modal-auth">
       <button class="modal-close" onclick="closeModal()">&times;</button>
       <div class="modal-body">
-        <p class="modal-title">Чтобы получить бесплатное занятие, полезные материалы и специальное предложение, войдите в свой аккаунт!</p>
+        <p class="modal-title">Чтобы получить бесплатное занятие, полезные материалы и специальное предложение, войдите
+          в свой аккаунт!</p>
         <div class="auth-buttons">
           <button class="btn btn-auth active" id="btnLoginTab" onclick="switchAuthTab('login')">Вход</button>
           <button class="btn btn-auth" id="btnRegisterTab" onclick="switchAuthTab('register')">Регистрация</button>
@@ -252,10 +269,12 @@
           <label for="loginPassword">Пароль</label>
           <input type="password" id="loginPassword" placeholder="Введите пароль" autocomplete="current-password">
           <button class="btn btn-login" id="loginSubmitBtn" disabled>Войти</button>
-          <button class="btn btn-yandex" onclick="window.location.href='/api/yandex-auth/?mode=login'">Вход через Яндекс</button>
+          <button class="btn btn-yandex" onclick="window.location.href='/api/yandex-auth/?mode=login'">Вход через
+            Яндекс</button>
         </div>
         <div id="registerForm" class="auth-form" style="display:none;">
-          <button class="btn btn-yandex" onclick="window.location.href='/api/yandex-auth/?mode=register'">Регистрация через Яндекс</button>
+          <button class="btn btn-yandex" onclick="window.location.href='/api/yandex-auth/?mode=register'">Регистрация
+            через Яндекс</button>
         </div>
       </div>
     </div>
@@ -264,7 +283,7 @@
   <script>
     function openModal() { document.getElementById('modal').classList.add('open'); }
     function closeModal() { document.getElementById('modal').classList.remove('open'); }
-    document.getElementById('modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+    document.getElementById('modal').addEventListener('click', function (e) { if (e.target === this) closeModal(); });
 
     function switchAuthTab(tab) {
       document.getElementById('btnLoginTab').classList.toggle('active', tab === 'login');
@@ -274,8 +293,8 @@
     }
 
     fetch('/api/user/info/', { credentials: 'include' })
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
         if (data.authenticated && data.avatar_url) {
           document.getElementById('avatarImg').src = data.avatar_url;
         }
@@ -283,29 +302,29 @@
           document.getElementById('phoneAlert').style.display = 'block';
         }
       })
-      .catch(function(e) { console.error('Ошибка загрузки профиля:', e); });
+      .catch(function (e) { console.error('Ошибка загрузки профиля:', e); });
 
     function savePhone() {
       var phone = document.getElementById('phoneInput').value.trim();
       if (!phone) { alert('Пожалуйста, введите номер телефона'); return; }
-      
+
       fetch('/api/user/phone/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone: phone }),
         credentials: 'include'
       })
-      .then(function(r) {
-        if (r.ok) {
-          document.getElementById('phoneAlert').querySelector('p').style.display = 'none';
-          document.getElementById('phoneInput').style.display = 'none';
-          document.getElementById('phoneSubmitBtn').style.display = 'none';
-          document.getElementById('phoneSuccess').style.display = 'block';
-        } else {
-          alert('Ошибка сохранения. Попробуйте ещё раз.');
-        }
-      })
-      .catch(function() { alert('Ошибка соединения.'); });
+        .then(function (r) {
+          if (r.ok) {
+            document.getElementById('phoneAlert').querySelector('p').style.display = 'none';
+            document.getElementById('phoneInput').style.display = 'none';
+            document.getElementById('phoneSubmitBtn').style.display = 'none';
+            document.getElementById('phoneSuccess').style.display = 'block';
+          } else {
+            alert('Ошибка сохранения. Попробуйте ещё раз.');
+          }
+        })
+        .catch(function () { alert('Ошибка соединения.'); });
     }
   </script>
 </body>
