@@ -162,12 +162,14 @@
           <label for="loginPassword">Пароль</label>
           <input type="password" id="loginPassword" placeholder="Введите пароль" autocomplete="current-password">
           <button class="btn btn-login" id="loginSubmitBtn" disabled>Войти</button>
-          <button class="btn btn-yandex" id="yandexBtnLogin" onclick="yandexAuth('login')">
+          <button class="btn btn-yandex" id="yandexBtnLogin"
+            onclick="window.location.href='/api/yandex-auth/?mode=login'">
             Вход через Яндекс
           </button>
         </div>
         <div id="registerForm" class="auth-form" style="display:none;">
-          <button class="btn btn-yandex" id="yandexBtnRegister" onclick="yandexAuth('register')">
+          <button class="btn btn-yandex" id="yandexBtnRegister"
+            onclick="window.location.href='/api/yandex-auth/?mode=register'">
             Регистрация через Яндекс
           </button>
         </div>
@@ -335,24 +337,6 @@
       });
       checkLoginForm();
     });
-
-    function yandexAuth(mode) {
-      fetch('/api/yandex-auth/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'mode=' + mode + '&login=user_' + Date.now()
-      })
-        .then(function (r) {
-          if (r.ok) {
-            window.location.href = '/welcome.html';
-          } else {
-            alert('Ошибка авторизации. Попробуйте ещё раз.');
-          }
-        })
-        .catch(function () {
-          alert('Не удалось подключиться к серверу. Проверьте соединение.');
-        });
-    }
 
     /* ---- Urgency modal with timer ---- */
     var urgencyTimerInterval = null;

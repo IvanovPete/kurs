@@ -1,12 +1,19 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.middleware.csrf import get_token
-from django.views.decorators.csrf import csrf_exempt
 import os
 import json
+import urllib.request
+import urllib.parse
 from django.conf import settings
 from .models import User
+
+
+YANDEX_CLIENT_ID = os.environ.get('YANDEX_CLIENT_ID', '')
+YANDEX_CLIENT_SECRET = os.environ.get('YANDEX_CLIENT_SECRET', '')
+YANDEX_REDIRECT_URI = os.environ.get(
+    'YANDEX_REDIRECT_URI', 'http://localhost:8000/api/yandex/callback/')
 
 
 def get_csrf_token(request):
@@ -40,69 +47,116 @@ def register_data(request):
     return HttpResponse(f'Заявка #{user.id} успешно создана', status=201)
 
 
-@csrf_exempt
-@require_http_methods(["POST"])
 def yandex_auth(request):
     """
-    Обрабатывает вход/регистрацию через Яндекс.
-    Принимает mode (login/register) и login (логин пользователя).
+    Редиректит пользователя на страницу авторизации Яндекса.
+    Принимает параметр ?mode=login или ?mode=register (опционально).
     """
+    mode = request.GET.get('mode', 'login')
+    callback_url = YANDEX_REDIRECT_URI + '?mode=' + mode
+
+    params = urllib.parse.urlencode({
+        'client_id': YANDEX_CLIENT_ID,
+        'redirect_uri': callback_url,
+        'response_type': 'code',
+    })
+    yandex_url = 'https://oauth.yandex.ru/authorize?' + params
+    return redirect(yandex_url)
+
+
+def yandex_callback(request):
+    """
+    Обрабатывает callback от Яндекса после авторизации пользователя.
+    """
+    code = request.GET.get('code')
+    mode = request.GET.get('mode', 'login')
+    error = request.GET.get('error')
+
+    if error or not code:
+        return HttpResponse('Авторизация отменена или произошла ошибка', status=400)
+
+    # 1. Обмениваем код на токен
+    callback_url = YANDEX_REDIRECT_URI + '?mode=' + mode
+    token_data = urllib.parse.urlencode({
+        'grant_type': 'authorization_code',
+        'code': code,
+        'client_id': YANDEX_CLIENT_ID,
+        'client_secret': YANDEX_CLIENT_SECRET,
+        'redirect_uri': callback_url,
+    }).encode()
+
+    token_req = urllib.request.Request(
+        'https://oauth.yandex.ru/token',
+        data=token_data,
+        headers={'Content-Type': 'application/x-www-form-urlencoded'}
+    )
+
     try:
-        data = json.loads(request.body) if request.body else {}
-    except json.JSONDecodeError:
-        data = {}
+        token_resp = urllib.request.urlopen(token_req)
+        token_json = json.loads(token_resp.read())
+        access_token = token_json.get('access_token')
+    except Exception as e:
+        return HttpResponse('Ошибка получения токена: ' + str(e), status=400)
 
-    mode = data.get('mode') or request.POST.get('mode')
-    login = data.get('login') or request.POST.get('login')
+    if not access_token:
+        return HttpResponse('Не удалось получить токен', status=400)
 
-    if not login:
-        return HttpResponse('Логин обязателен', status=400)
+    # 2. Получаем информацию о пользователе
+    user_req = urllib.request.Request(
+        'https://login.yandex.ru/info',
+        headers={'Authorization': 'OAuth ' + access_token}
+    )
 
-    # Генерируем yandex_id на основе логина (заглушка, т.к. нет реальной OAuth)
-    yandex_id = f'yandex_{login}'
+    try:
+        user_resp = urllib.request.urlopen(user_req)
+        user_info = json.loads(user_resp.read())
+    except Exception as e:
+        return HttpResponse('Ошибка получения данных пользователя: ' + str(e), status=400)
 
-    if mode == 'register':
-        # Проверяем, не существует ли уже такой пользователь
-        if User.objects.filter(yandex_id=yandex_id).exists():
-            return HttpResponse('Пользователь с таким Яндекс-аккаунтом уже зарегистрирован', status=409)
+    yandex_id = user_info.get('id', '')
+    login = user_info.get('login', '')
+    email = user_info.get('default_email', '')
 
-        # Создаём нового пользователя
-        User.objects.create(
-            yandex_id=yandex_id,
-            login=login,
-            free_lessons=1  # Первое занятие бесплатно
-        )
-        return HttpResponse('Регистрация успешна', status=201)
+    if not yandex_id:
+        return HttpResponse('Не удалось получить ID пользователя', status=400)
 
-    elif mode == 'login':
-        # Ищем существующего пользователя
-        user = User.objects.filter(yandex_id=yandex_id).first()
-        if not user:
-            return HttpResponse('Пользователь не найден. Сначала зарегистрируйтесь.', status=404)
+    # 3. Создаём или находим пользователя
+    user, created = User.objects.get_or_create(
+        yandex_id=yandex_id,
+        defaults={
+            'login': login,
+            'email': email,
+            'free_lessons': 1,
+        }
+    )
 
-        return HttpResponse('Вход успешен', status=200)
+    if not created:
+        # Обновляем данные при каждом входе
+        user.login = login
+        user.email = email
+        user.save()
 
-    else:
-        return HttpResponse('Неверный режим. Используйте login или register.', status=400)
+    # 4. Сохраняем yandex_id в сессии
+    request.session['yandex_user_id'] = yandex_id
+    request.session['user_login'] = login
 
-
-def welcome_page(request):
-    """Страница приветствия после успешного входа"""
-    return render(request, 'welcome.html')
+    # 5. Редиректим на welcome.html
+    frontend_url = 'https://kurs.zapto.org/welcome.html'
+    return redirect(frontend_url)
 
 
 def download_first_lesson(request):
     """Скачать первый урок английского"""
     file_path = os.path.join(
-        settings.BASE_DIR, 'documents', 'first-lesson.docx')
-    return _download_file(file_path, 'first-lesson.docx')
+        settings.BASE_DIR, 'documents', 'Первый урок английского языка.docx')
+    return _download_file(file_path, 'Первый урок английского языка.docx')
 
 
 def download_irregular_verbs(request):
     """Скачать шпаргалку с неправильными глаголами"""
     file_path = os.path.join(
-        settings.BASE_DIR, 'documents', 'irregular-verbs.docx')
-    return _download_file(file_path, 'irregular-verbs.docx')
+        settings.BASE_DIR, 'documents', '30 самых важных неправильных глаголов.docx')
+    return _download_file(file_path, '30 самых важных неправильных глаголов.docx')
 
 
 def download_user_agreement(request):
