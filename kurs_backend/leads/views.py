@@ -52,16 +52,21 @@ def yandex_auth(request):
     Редиректит пользователя на страницу авторизации Яндекса.
     Принимает параметр ?mode=login или ?mode=register (опционально).
     """
-    mode = request.GET.get('mode', 'login')
-    callback_url = YANDEX_REDIRECT_URI + '?mode=' + mode
+    try:
+        mode = request.GET.get('mode', 'login')
+        callback_url = YANDEX_REDIRECT_URI + '?mode=' + mode
 
-    params = urllib.parse.urlencode({
-        'client_id': YANDEX_CLIENT_ID,
-        'redirect_uri': callback_url,
-        'response_type': 'code',
-    })
-    yandex_url = 'https://oauth.yandex.ru/authorize?' + params
-    return redirect(yandex_url)
+        params = urllib.parse.urlencode({
+            'client_id': YANDEX_CLIENT_ID,
+            'redirect_uri': callback_url,
+            'response_type': 'code',
+        })
+        yandex_url = 'https://oauth.yandex.ru/authorize?' + params
+        return redirect(yandex_url)
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).exception('YANDEX_AUTH_ERROR')
+        return HttpResponse('Ошибка: ' + str(e), status=500)
 
 
 def yandex_callback(request):
