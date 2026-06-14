@@ -1,10 +1,12 @@
 from django.db import models
 
 class Lead(models.Model):
-    phone = models.CharField('Номер телефона', max_length=20)  # обязательное поле
+    phone = models.CharField('Номер телефона', max_length=20, blank=True, null=True)  
+    email = models.EmailField('Почта', max_length=50, blank=True, null=True)
     
     age = models.CharField('Возраст ребёнка', max_length=10, blank=True, null=True)
     free_lessons = models.IntegerField('Количество бесплатных занятий', blank=True, null=True)
+
     # Отдельные необязательные поля для каждой соцсети
     telegram = models.CharField('Telegram', max_length=100, blank=True, null=True)
     vk = models.CharField('VK', max_length=100, blank=True, null=True)
