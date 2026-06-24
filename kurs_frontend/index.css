@@ -938,3 +938,389 @@ a {
 /* ===========================================
    COOKIE BANNER — удалён (метрика всегда активна)
    =========================================== */
+
+/* ===========================================
+   TEACHERS CAROUSEL
+   =========================================== */
+.teachers-carousel {
+  position: relative;
+  margin-top: 40px;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+  padding: 0;
+}
+
+/* Показываем часть следующей карточки для интриги */
+.teacher-slider {
+  display: flex;
+  transition: transform 0.4s ease-in-out;
+}
+
+.teacher-card {
+  min-width: calc(100% - 60px);
+  padding: 40px 30px;
+  text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 60px;
+}
+
+.teacher-card:last-child {
+  margin-right: 0;
+}
+
+/* Фото — крупное, прямоугольное (не круглое) */
+.teacher-photo {
+  width: 300px;
+  height: 380px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 0 auto 20px;
+  border: 4px solid #2799b1;
+  box-shadow: 0 4px 20px rgba(39, 153, 177, 0.25);
+  flex-shrink: 0;
+}
+
+.teacher-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.teacher-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 6px;
+}
+
+.teacher-desc {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  max-width: 400px;
+}
+
+/* Video section */
+.teacher-video-section {
+  margin: 10px 0 20px;
+}
+
+.btn-play {
+  background: #2799b1;
+  color: #fff;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.btn-play:hover {
+  background: #1f7f94;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(39, 153, 177, 0.3);
+}
+
+/* Reviews section — крупнее */
+.teacher-reviews {
+  margin-top: 15px;
+  width: 100%;
+  max-width: 650px;
+}
+
+.reviews-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 14px;
+}
+
+.reviews-slider {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.review-img {
+  width: 170px;
+  height: 230px;
+  object-fit: cover;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+
+.review-img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Slider arrows */
+.slider-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(39, 153, 177, 0.85);
+  color: #fff;
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 28px;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.2s;
+  line-height: 1;
+}
+
+.slider-arrow:hover {
+  background: #1f7f94;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.slider-arrow-left {
+  left: 12px;
+}
+
+.slider-arrow-right {
+  right: 12px;
+}
+
+/* Slider dots */
+.slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px 0;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #d0d0d0;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.dot.active {
+  background: #2799b1;
+  transform: scale(1.2);
+}
+
+.dot:hover {
+  background: #2799b1;
+}
+
+/* Video modal */
+.modal-video {
+  max-width: 800px;
+}
+
+.video-modal-body {
+  padding: 20px;
+}
+
+.teacher-video-player {
+  width: 100%;
+  border-radius: 10px;
+  outline: none;
+}
+
+/* Review modal */
+.modal-review {
+  max-width: 700px;
+}
+
+.review-modal-body {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.review-full-img {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+/* ===========================================
+   TEMA SECTION
+   =========================================== */
+.tema-section {
+  padding: 60px 0;
+}
+
+.tema-card {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  border-radius: 20px;
+  padding: 50px 40px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.tema-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: 30px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tema-image-wrapper {
+  max-width: 600px;
+  margin: 0 auto 30px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.tema-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.btn-tema {
+  display: inline-block;
+  padding: 16px 40px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  font-family: inherit;
+  background: #2799b1;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+.btn-tema:hover {
+  background: #1f7f94;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(39, 153, 177, 0.4);
+}
+
+/* Responsive for teachers and tema */
+@media (max-width: 768px) {
+  .teacher-photo {
+    width: 220px;
+    height: 280px;
+  }
+
+  .teacher-card {
+    padding: 30px 20px;
+    min-width: calc(100% - 30px);
+    margin-right: 30px;
+  }
+
+  .teacher-name {
+    font-size: 1.2rem;
+  }
+
+  .review-img {
+    width: 130px;
+    height: 175px;
+  }
+
+  .reviews-slider {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+  .reviews-slider::-webkit-scrollbar {
+    display: none;
+  }
+
+  .slider-arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 22px;
+  }
+
+  .slider-arrow-left {
+    left: 6px;
+  }
+
+  .slider-arrow-right {
+    right: 6px;
+  }
+
+  .tema-card {
+    padding: 35px 20px;
+  }
+
+  .tema-title {
+    font-size: 1.05rem;
+  }
+
+  .btn-tema {
+    padding: 14px 30px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .teacher-photo {
+    width: 160px;
+    height: 210px;
+  }
+
+  .teacher-card {
+    min-width: 100%;
+    margin-right: 0;
+    padding: 25px 15px;
+  }
+
+  .review-img {
+    width: 95px;
+    height: 130px;
+  }
+
+  .reviews-slider {
+    flex-wrap: nowrap;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    justify-content: flex-start;
+    padding: 4px 0;
+  }
+
+  .reviews-slider::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tema-title {
+    font-size: 0.95rem;
+  }
+
+  .tema-card {
+    padding: 25px 15px;
+  }
+}

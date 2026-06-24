@@ -61,20 +61,111 @@
   <section class="banner">
     <div class="container">
       <div class="banner-card">
-        <h2>Первое занятие бесплатно! Попробуйте и получите результат уже в первый месяц!</h2>
+        <h2>Первое занятие бесплатно! Попробуйте и получите результат уже в первые две недели!</h2>
       </div>
     </div>
   </section>
 
   <!-- ============ TEACHERS ============ -->
-  <section class="section">
+  <section class="section" id="teachers">
     <div class="container">
       <div class="card card-accent">
         <div class="card-body">
           <h3>Наши преподаватели проходят строгий отбор</h3>
           <p>Педагоги смогут найти общий язык с ребёнком и заинтересовать английским.</p>
-          <button class="btn" onclick="openModal()">Получить первое занятие бесплатно</button>
         </div>
+      </div>
+
+      <!-- Teacher carousel -->
+      <div class="teachers-carousel">
+        <div class="teacher-slider" id="teacherSlider">
+          <!-- Teacher 1: Полина Дементьева -->
+          <div class="teacher-card" data-teacher="1">
+            <div class="teacher-photo">
+              <img src="images/teacher_1.png" alt="Полина Дементьева">
+            </div>
+            <h4 class="teacher-name">Полина Дементьева</h4>
+            <p class="teacher-desc">МГУ<br>Международные отношения, глобальная энергетика и международный бизнес</p>
+            <!-- Video section for teacher 1 -->
+            <div class="teacher-video-section">
+              <button class="btn btn-play" onclick="openTeacherVideo('videos/teacher_1_video.mp4', 1)">▶ Смотреть
+                видеоприветствие</button>
+            </div>
+            <!-- Reviews for teacher 1 -->
+            <div class="teacher-reviews">
+              <p class="reviews-title">Отзывы:</p>
+              <div class="reviews-slider" id="reviewsSlider1">
+                <img src="images/teacher_1_review_1.jpg" alt="Отзыв 1" class="review-img"
+                  onclick="openReviewModal(this.src)">
+                <img src="images/teacher_1_review_2.jpg" alt="Отзыв 2" class="review-img"
+                  onclick="openReviewModal(this.src)">
+                <img src="images/teacher_1_review_3.jpg" alt="Отзыв 3" class="review-img"
+                  onclick="openReviewModal(this.src)">
+              </div>
+            </div>
+          </div>
+
+          <!-- Teacher 2: Пётр Иванов -->
+          <div class="teacher-card" data-teacher="2">
+            <div class="teacher-photo">
+              <img src="images/teacher_2.jpg" alt="Пётр Иванов">
+            </div>
+            <h4 class="teacher-name">Пётр Иванов</h4>
+            <p class="teacher-desc">РУДН<br>Филология</p>
+            <!-- Reviews for teacher 2 -->
+            <div class="teacher-reviews">
+              <p class="reviews-title">Отзывы:</p>
+              <div class="reviews-slider" id="reviewsSlider2">
+                <img src="images/teacher_2_review_1.png" alt="Отзыв 1" class="review-img"
+                  onclick="openReviewModal(this.src)">
+                <img src="images/teacher_2_review_2.png" alt="Отзыв 2" class="review-img"
+                  onclick="openReviewModal(this.src)">
+                <img src="images/teacher_2_review_3.png" alt="Отзыв 3" class="review-img"
+                  onclick="openReviewModal(this.src)">
+              </div>
+            </div>
+          </div>
+
+          <!-- Teacher 3: Диана Пакушина -->
+          <div class="teacher-card" data-teacher="3">
+            <div class="teacher-photo">
+              <img src="images/teacher_3.jpg" alt="Диана Пакушина">
+            </div>
+            <h4 class="teacher-name">Диана Пакушина</h4>
+            <p class="teacher-desc">Зарубежная филология, переводоведение</p>
+          </div>
+        </div>
+
+        <!-- Navigation arrows -->
+        <button class="slider-arrow slider-arrow-left" onclick="slideTeacher(-1)">‹</button>
+        <button class="slider-arrow slider-arrow-right" onclick="slideTeacher(1)">›</button>
+
+        <!-- Dots -->
+        <div class="slider-dots" id="teacherDots">
+          <span class="dot active" onclick="goToTeacher(0)"></span>
+          <span class="dot" onclick="goToTeacher(1)"></span>
+          <span class="dot" onclick="goToTeacher(2)"></span>
+        </div>
+      </div>
+
+      <div style="text-align:center; margin-top: 30px;">
+        <button class="btn btn-primary" onclick="openModal()">Получить первое занятие бесплатно</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TEMA RESOURCE ============ -->
+  <section class="section tema-section">
+    <div class="container">
+      <div class="tema-card">
+        <h2 class="tema-title">Мы разработали специальный ресурс, где ученики будут выполнять домашние задания,
+          сгенерированные ИИ так, чтобы ребята могли отработать темы и слова, которые вызывают у них наибольшие
+          трудности!
+        </h2>
+        <div class="tema-image-wrapper">
+          <img src="images/tema.png" alt="Tema.study - платформа с ИИ для домашних заданий" class="tema-image">
+        </div>
+        <a href="https://tema.study" target="_blank" class="btn btn-tema">Попробовать ресурс</a>
       </div>
     </div>
   </section>
@@ -182,6 +273,29 @@
     <div class="modal modal-test">
       <button class="modal-close" onclick="closeTestModal()">&times;</button>
       <div id="testContent" class="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: Видео преподавателя ============ -->
+  <div id="videoModal" class="modal-overlay">
+    <div class="modal modal-video">
+      <button class="modal-close" onclick="closeVideoModal()">&times;</button>
+      <div class="modal-body video-modal-body">
+        <video id="teacherVideoPlayer" controls class="teacher-video-player">
+          <source src="" type="video/mp4">
+          Ваш браузер не поддерживает видео.
+        </video>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: Просмотр отзыва ============ -->
+  <div id="reviewModal" class="modal-overlay">
+    <div class="modal modal-review">
+      <button class="modal-close" onclick="closeReviewModal()">&times;</button>
+      <div class="modal-body review-modal-body">
+        <img id="reviewModalImg" src="" alt="Отзыв" class="review-full-img">
+      </div>
     </div>
   </div>
 
@@ -414,6 +528,73 @@
       });
       // Auto-open urgency modal is removed — it should not open automatically
     });
+
+    /* ---- Teacher carousel ---- */
+    var currentTeacherIndex = 0;
+    var totalTeachers = 3;
+
+    function slideTeacher(direction) {
+      currentTeacherIndex += direction;
+      if (currentTeacherIndex < 0) currentTeacherIndex = totalTeachers - 1;
+      if (currentTeacherIndex >= totalTeachers) currentTeacherIndex = 0;
+      updateTeacherSlider();
+    }
+
+    function goToTeacher(index) {
+      currentTeacherIndex = index;
+      updateTeacherSlider();
+    }
+
+    function updateTeacherSlider() {
+      var slider = document.getElementById("teacherSlider");
+      var cards = slider.querySelectorAll(".teacher-card");
+      if (cards.length > 0) {
+        var cardWidth = cards[0].offsetWidth;
+        var style = window.getComputedStyle(cards[0]);
+        var marginRight = parseFloat(style.marginRight) || 0;
+        var step = cardWidth + marginRight;
+        slider.style.transform = "translateX(-" + (currentTeacherIndex * step) + "px)";
+      }
+      var dots = document.querySelectorAll("#teacherDots .dot");
+      for (var i = 0; i < dots.length; i++) {
+        dots[i].classList.toggle("active", i === currentTeacherIndex);
+      }
+    }
+
+    /* ---- Teacher video ---- */
+    function openTeacherVideo(videoPath, teacherNum) {
+      var video = document.getElementById("teacherVideoPlayer");
+      video.src = videoPath;
+      video.load();
+      document.getElementById("videoModal").classList.add("open");
+    }
+
+    function closeVideoModal() {
+      var video = document.getElementById("teacherVideoPlayer");
+      video.pause();
+      video.src = "";
+      document.getElementById("videoModal").classList.remove("open");
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("videoModal").addEventListener("click", function (e) {
+        if (e.target === this) closeVideoModal();
+      });
+      document.getElementById("reviewModal").addEventListener("click", function (e) {
+        if (e.target === this) closeReviewModal();
+      });
+    });
+
+    /* ---- Review modal ---- */
+    function openReviewModal(src) {
+      document.getElementById("reviewModalImg").src = src;
+      document.getElementById("reviewModal").classList.add("open");
+    }
+
+    function closeReviewModal() {
+      document.getElementById("reviewModalImg").src = "";
+      document.getElementById("reviewModal").classList.remove("open");
+    }
   </script>
 </body>
 
