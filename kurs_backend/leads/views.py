@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, JsonResponse
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 from django.middleware.csrf import get_token
 from django.contrib.auth.hashers import make_password, check_password
 import os
@@ -24,6 +25,7 @@ def get_csrf_token(request):
     return JsonResponse({'csrfToken': get_token(request)})
 
 
+@csrf_exempt
 @require_http_methods(["POST"])
 def register_data(request):
     """Принимает данные: телефон (обязательный) и соцсети (необязательные)"""
@@ -50,6 +52,7 @@ def register_data(request):
     return HttpResponse(f'Заявка #{user.id} успешно создана', status=201)
 
 
+@csrf_exempt
 @require_http_methods(["POST"])
 def register_phone(request):
     """Регистрация по номеру телефона и паролю"""
@@ -85,6 +88,7 @@ def register_phone(request):
     }, status=201)
 
 
+@csrf_exempt
 @require_http_methods(["POST"])
 def login_phone(request):
     """Вход по номеру телефона и паролю"""
@@ -121,6 +125,7 @@ def login_phone(request):
     })
 
 
+@csrf_exempt
 @require_http_methods(["POST"])
 def logout_user(request):
     """Выход из аккаунта"""
@@ -298,6 +303,7 @@ def get_user_info(request):
     return JsonResponse({'authenticated': False})
 
 
+@csrf_exempt
 @require_http_methods(["POST"])
 def save_phone(request):
     """Сохраняет номер телефона после входа"""
