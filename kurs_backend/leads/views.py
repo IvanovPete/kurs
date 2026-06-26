@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.middleware.csrf import get_token
+from django.contrib.auth.hashers import make_password, check_password
 import os
 import json
 import urllib.request
@@ -47,6 +48,84 @@ def register_data(request):
     )
 
     return HttpResponse(f'Заявка #{user.id} успешно создана', status=201)
+
+
+@require_http_methods(["POST"])
+def register_phone(request):
+    """Регистрация по номеру телефона и паролю"""
+    try:
+        data = json.loads(request.body) if request.body else {}
+    except:
+        data = {}
+
+    phone = data.get('phone', '').strip()
+    password = data.get('password', '').strip()
+
+    if not phone:
+        return JsonResponse({'error': 'Номер телефона обязателен'}, status=400)
+    if not password or len(password) < 4:
+        return JsonResponse({'error': 'Пароль должен быть не менее 4 символов'}, status=400)
+
+    if User.objects.filter(phone=phone).exists():
+        return JsonResponse({'error': 'Этот номер телефона уже зарегистрирован'}, status=409)
+
+    user = User.objects.create(
+        phone=phone,
+        password=make_password(password),
+        free_lessons=1,
+    )
+
+    request.session['user_phone'] = phone
+    request.session['user_name'] = phone
+
+    return JsonResponse({
+        'ok': True,
+        'user_id': user.id,
+        'phone': phone,
+    }, status=201)
+
+
+@require_http_methods(["POST"])
+def login_phone(request):
+    """Вход по номеру телефона и паролю"""
+    try:
+        data = json.loads(request.body) if request.body else {}
+    except:
+        data = {}
+
+    phone = data.get('phone', '').strip()
+    password = data.get('password', '').strip()
+
+    if not phone or not password:
+        return JsonResponse({'error': 'Телефон и пароль обязательны'}, status=400)
+
+    try:
+        user = User.objects.get(phone=phone)
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'Пользователь с таким номером не найден'}, status=404)
+
+    if not user.password:
+        return JsonResponse({'error': 'Этот аккаунт зарегистрирован через Яндекс. Используйте вход через Яндекс.'}, status=401)
+
+    if not check_password(password, user.password):
+        return JsonResponse({'error': 'Неверный пароль'}, status=401)
+
+    request.session['user_phone'] = phone
+    request.session['user_name'] = user.first_name or phone
+    request.session['user_id'] = user.id
+
+    return JsonResponse({
+        'ok': True,
+        'phone': phone,
+        'name': user.first_name or phone,
+    })
+
+
+@require_http_methods(["POST"])
+def logout_user(request):
+    """Выход из аккаунта"""
+    request.session.flush()
+    return JsonResponse({'ok': True})
 
 
 def yandex_auth(request):
@@ -191,22 +270,32 @@ def yandex_callback(request):
 
 def get_user_info(request):
     """Возвращает информацию о текущем пользователе по сессии"""
+    # Сначала проверяем вход через Яндекс
     yandex_id = request.session.get('yandex_user_id')
-    if not yandex_id:
-        return JsonResponse({'authenticated': False})
+    if yandex_id:
+        user = User.objects.filter(yandex_id=yandex_id).first()
+        if user:
+            return JsonResponse({
+                'authenticated': True,
+                'login': user.login or '',
+                'name': (user.first_name or '') + ' ' + (user.last_name or ''),
+                'email': user.email or '',
+                'phone': user.phone or '',
+                'avatar_url': user.avatar_url or '',
+            })
 
-    user = User.objects.filter(yandex_id=yandex_id).first()
-    if not user:
-        return JsonResponse({'authenticated': False})
+    # Проверяем вход по телефону
+    phone = request.session.get('user_phone')
+    if phone:
+        user = User.objects.filter(phone=phone).first()
+        if user:
+            return JsonResponse({
+                'authenticated': True,
+                'phone': user.phone or '',
+                'name': user.first_name or user.phone or '',
+            })
 
-    return JsonResponse({
-        'authenticated': True,
-        'login': user.login or '',
-        'name': (user.first_name or '') + ' ' + (user.last_name or ''),
-        'email': user.email or '',
-        'phone': user.phone or '',
-        'avatar_url': user.avatar_url or '',
-    })
+    return JsonResponse({'authenticated': False})
 
 
 @require_http_methods(["POST"])

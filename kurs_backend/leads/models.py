@@ -5,8 +5,11 @@ class User(models.Model):
     phone = models.CharField(
         'Номер телефона', max_length=20, blank=True, null=True)
     email = models.EmailField('Почта', max_length=100, blank=True, null=True)
-    yandex_id = models.CharField('Яндекс ID', max_length=100, unique=True)
+    yandex_id = models.CharField(
+        'Яндекс ID', max_length=100, unique=True, blank=True, null=True)
     login = models.CharField('Логин', max_length=100, blank=True, null=True)
+    password = models.CharField(
+        'Пароль', max_length=128, blank=True, null=True)
     first_name = models.CharField('Имя', max_length=100, blank=True, null=True)
     last_name = models.CharField(
         'Фамилия', max_length=100, blank=True, null=True)
@@ -42,4 +45,6 @@ class User(models.Model):
         verbose_name_plural = 'Заявки'
 
     def __str__(self):
-        return f'{self.phone} - {self.created_at.strftime("%d.%m.%Y %H:%M")}'
+        if self.phone:
+            return f'{self.phone} - {self.created_at.strftime("%d.%m.%Y %H:%M")}'
+        return f'{self.yandex_id} - {self.created_at.strftime("%d.%m.%Y %H:%M")}'
