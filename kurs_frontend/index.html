@@ -22,6 +22,10 @@
   <meta name="description"
     content="Курс - онлайн-занятия английским с опытными преподавателями для школьников. Первое занятие бесплатно!">
   <title>Курс - Английский для школьников онлайн</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="index.css">
 </head>
 
@@ -57,27 +61,25 @@
     </div>
   </section>
 
-  <!-- ============ BANNER ============ -->
+  <!-- ============ BANNтсяER ============ -->
   <section class="banner">
     <div class="container">
       <div class="banner-card">
         <h2>Первое занятие бесплатно! Попробуйте и получите результат уже в первые две недели!</h2>
       </div>
     </div>
-  </section> 
+  </section>
 
   <!-- ============ TEACHERS ============ -->
   <section class="section" id="teachers">
     <div class="container">
-      <div class="card card-accent">
-        <div class="card-body">
+      <!-- Teacher carousel -->
+      <div class="teachers-carousel">
+        <div class="teachers-header">
           <h3>Наши преподаватели проходят строгий отбор</h3>
           <p>Педагоги смогут найти общий язык с ребёнком и заинтересовать английским.</p>
         </div>
-      </div>
 
-      <!-- Teacher carousel -->
-      <div class="teachers-carousel">
         <div class="teacher-slider" id="teacherSlider">
           <!-- Teacher 1: Полина Дементьева -->
           <div class="teacher-card" data-teacher="1">
@@ -91,18 +93,6 @@
               <button class="btn btn-play" onclick="openTeacherVideo('videos/teacher_1_video.mp4', 1)">▶ Смотреть
                 видеоприветствие</button>
             </div>
-            <!-- Reviews for teacher 1 -->
-            <div class="teacher-reviews">
-              <p class="reviews-title">Отзывы:</p>
-              <div class="reviews-slider" id="reviewsSlider1">
-                <img src="images/teacher_1_review_1.jpg" alt="Отзыв 1" class="review-img"
-                  onclick="openReviewModal(this.src)">
-                <img src="images/teacher_1_review_2.jpg" alt="Отзыв 2" class="review-img"
-                  onclick="openReviewModal(this.src)">
-                <img src="images/teacher_1_review_3.jpg" alt="Отзыв 3" class="review-img"
-                  onclick="openReviewModal(this.src)">
-              </div>
-            </div>
           </div>
 
           <!-- Teacher 2: Пётр Иванов -->
@@ -112,18 +102,6 @@
             </div>
             <h4 class="teacher-name">Пётр Иванов</h4>
             <p class="teacher-desc">РУДН<br>Филология</p>
-            <!-- Reviews for teacher 2 -->
-            <div class="teacher-reviews">
-              <p class="reviews-title">Отзывы:</p>
-              <div class="reviews-slider" id="reviewsSlider2">
-                <img src="images/teacher_2_review_1.png" alt="Отзыв 1" class="review-img"
-                  onclick="openReviewModal(this.src)">
-                <img src="images/teacher_2_review_2.png" alt="Отзыв 2" class="review-img"
-                  onclick="openReviewModal(this.src)">
-                <img src="images/teacher_2_review_3.png" alt="Отзыв 3" class="review-img"
-                  onclick="openReviewModal(this.src)">
-              </div>
-            </div>
           </div>
 
           <!-- Teacher 3: Диана Пакушина -->
@@ -132,7 +110,7 @@
               <img src="images/teacher_3.jpg" alt="Диана Пакушина">
             </div>
             <h4 class="teacher-name">Диана Пакушина</h4>
-            <p class="teacher-desc">Зарубежная филология, переводоведение</p>
+            <p class="teacher-desc">ИвГУ<br>Зарубежная филология, переводоведение</p>
           </div>
         </div>
 
@@ -154,18 +132,78 @@
     </div>
   </section>
 
+  <!-- ============ REVIEWS ============ -->
+  <section class="section" id="reviews">
+    <div class="container">
+
+      <div class="reviews-carousel">
+        <div class="reviews-header">
+          <h3>Отзывы о наших преподавателях</h3>
+        </div>
+
+        <div class="reviews-slider" id="reviewsSlider">
+          <!-- Отзывы Петра Иванова -->
+          <!-- Review 1 (Пётр) -->
+          <div class="review-card">
+            <img src="images/teacher_2_review_1.png" alt="Отзыв 1" class="review-img"
+              onclick="openReviewModal(this.src)">
+          </div>
+          <!-- Review 2 (Пётр) -->
+          <div class="review-card">
+            <img src="images/teacher_2_review_2.png" alt="Отзыв 2" class="review-img"
+              onclick="openReviewModal(this.src)">
+          </div>
+          <!-- Review 3 (Пётр) -->
+          <div class="review-card">
+            <img src="images/teacher_2_review_3.png" alt="Отзыв 3" class="review-img"
+              onclick="openReviewModal(this.src)">
+          </div>
+          <!-- Review 4 (Полина) -->
+          <div class="review-card">
+            <img src="images/teacher_1_review_1.jpg" alt="Отзыв 4" class="review-img"
+              onclick="openReviewModal(this.src)">
+          </div>
+          <!-- Review 5 (Полина) -->
+          <div class="review-card">
+            <img src="images/teacher_1_review_2.jpg" alt="Отзыв 5" class="review-img"
+              onclick="openReviewModal(this.src)">
+          </div>
+          <!-- Review 6 (Полина) -->
+          <div class="review-card">
+            <img src="images/teacher_1_review_3.jpg" alt="Отзыв 6" class="review-img"
+              onclick="openReviewModal(this.src)">
+          </div>
+        </div>
+
+        <!-- Navigation arrows -->
+        <button class="reviews-arrow reviews-arrow-left" onclick="slideReview(-1)">‹</button>
+        <button class="reviews-arrow reviews-arrow-right" onclick="slideReview(1)">›</button>
+
+        <!-- Dots -->
+        <div class="reviews-dots" id="reviewsDots">
+          <span class="dot active" onclick="goToReview(0)"></span>
+          <span class="dot" onclick="goToReview(1)"></span>
+          <span class="dot" onclick="goToReview(2)"></span>
+          <span class="dot" onclick="goToReview(3)"></span>
+          <span class="dot" onclick="goToReview(4)"></span>
+          <span class="dot" onclick="goToReview(5)"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ TEMA RESOURCE ============ -->
   <section class="section tema-section">
     <div class="container">
       <div class="tema-card">
-        <h2 class="tema-title">Мы разработали специальный ресурс, где ученики будут выполнять домашние задания,
+        <h2 class="tema-title">Мы разработали специальный тренажёр, где ученики будут выполнять домашние задания,
           сгенерированные ИИ так, чтобы ребята могли отработать темы и слова, которые вызывают у них наибольшие
           трудности!
         </h2>
         <div class="tema-image-wrapper">
           <img src="images/tema.png" alt="Tema.study - платформа с ИИ для домашних заданий" class="tema-image">
         </div>
-        <a href="https://tema.study" target="_blank" class="btn btn-tema">Попробовать ресурс</a>
+        <a href="https://tema.study" target="_blank" class="btn btn-tema">Попробовать тренажёр</a>
       </div>
     </div>
   </section>
@@ -210,12 +248,66 @@
         </div>
         <div class="comfort-item comfort-item-accent">
           <div class="comfort-accent-content">
-            <p>Напишите нам — и мы подберём удобное время и группу для вашего ребёнка!</p>
+            <p>Зарегистрируйтесь — и мы подберём удобное время и группу для вашего ребёнка!</p>
           </div>
         </div>
       </div>
       <div style="text-align:center; margin-top: 40px;">
         <button class="btn btn-primary" onclick="openModal()">Получить первое занятие бесплатно</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="faq-header">
+        <h3>Часто задаваемые вопросы</h3>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>Как записаться?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Зарегистрируйтесь и с Вами сразу свяжется наш менеджер, чтобы записать на бесплатное пробное занятие.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>Сколько стоит занятие?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Зависит от группы, определяемой по уровню языка, одно можно сказать точно, наше предложение по цене будет
+              одним из лучших, так как все наши бизнес-процессы оптимизированы.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>Как работает тренажёр?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Наш тренажёр разрабатывался год и протестирован на многих учениках — с ним люди, которые не имели никаких
+              знаний, начинали говорить в первые недели занятий.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>Где будет происходить коммуникация?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Занятия мы ведём в Яндекс Телемосте, а общаемся с родителями и учениками в том мессенджере, где им
+              удобно.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -470,7 +562,7 @@
       var bar = document.getElementById("urgencyTimerBar");
       if (bar) {
         bar.style.width = "100%";
-        bar.style.background = "#4caf50";
+        bar.style.background = "#0f3460";
       }
     }
 
@@ -483,11 +575,11 @@
         var pct = Math.max(0, 100 - (elapsed / URGENCY_DURATION) * 100);
         bar.style.width = pct + "%";
         if (pct > 66) {
-          bar.style.background = "#4caf50";
+          bar.style.background = "#0f3460";
         } else if (pct > 33) {
-          bar.style.background = "#ffc107";
+          bar.style.background = "#1a1a2e";
         } else {
-          bar.style.background = "#f44336";
+          bar.style.background = "#16213e";
         }
         if (pct <= 0) {
           clearInterval(urgencyTimerInterval);
@@ -585,6 +677,63 @@
       });
     });
 
+    /* ---- Reviews carousel ---- */
+    var currentReviewIndex = 0;
+    var totalReviews = 6;
+
+    function slideReview(direction) {
+      currentReviewIndex += direction;
+      if (currentReviewIndex < 0) currentReviewIndex = totalReviews - 1;
+      if (currentReviewIndex >= totalReviews) currentReviewIndex = 0;
+      goToReviewScroll(currentReviewIndex);
+    }
+
+    function goToReview(index) {
+      currentReviewIndex = index;
+      goToReviewScroll(index);
+    }
+
+    function goToReviewScroll(index) {
+      var slider = document.getElementById("reviewsSlider");
+      var cards = slider.querySelectorAll(".review-card");
+      if (cards.length > 0 && cards[index]) {
+        // Плавно скроллим до нужной карточки
+        cards[index].scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+      }
+      var dots = document.querySelectorAll("#reviewsDots .dot");
+      for (var i = 0; i < dots.length; i++) {
+        dots[i].classList.toggle("active", i === index);
+      }
+    }
+
+    // При ручном скролле обновляем точку
+    document.addEventListener("DOMContentLoaded", function () {
+      var slider = document.getElementById("reviewsSlider");
+      if (slider) {
+        slider.addEventListener("scroll", function () {
+          var cards = slider.querySelectorAll(".review-card");
+          if (cards.length > 0) {
+            var sliderRect = slider.getBoundingClientRect();
+            var closest = 0;
+            var closestDist = Infinity;
+            for (var i = 0; i < cards.length; i++) {
+              var cardRect = cards[i].getBoundingClientRect();
+              var dist = Math.abs(cardRect.left - sliderRect.left);
+              if (dist < closestDist) {
+                closestDist = dist;
+                closest = i;
+              }
+            }
+            currentReviewIndex = closest;
+            var dots = document.querySelectorAll("#reviewsDots .dot");
+            for (var j = 0; j < dots.length; j++) {
+              dots[j].classList.toggle("active", j === closest);
+            }
+          }
+        });
+      }
+    });
+
     /* ---- Review modal ---- */
     function openReviewModal(src) {
       document.getElementById("reviewModalImg").src = src;
@@ -594,6 +743,21 @@
     function closeReviewModal() {
       document.getElementById("reviewModalImg").src = "";
       document.getElementById("reviewModal").classList.remove("open");
+    }
+
+    /* ---- FAQ accordion ---- */
+    function toggleFaq(btn) {
+      var item = btn.parentElement;
+      var isOpen = item.classList.contains("faq-open");
+      // Закрываем все
+      var allItems = document.querySelectorAll(".faq-item");
+      for (var i = 0; i < allItems.length; i++) {
+        allItems[i].classList.remove("faq-open");
+      }
+      // Если был закрыт — открываем
+      if (!isOpen) {
+        item.classList.add("faq-open");
+      }
     }
   </script>
 </body>
