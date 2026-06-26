@@ -29,3 +29,4 @@ class UserAdmin(admin.ModelAdmin):
             'description': 'Эти поля заполняются только вручную через админку'
         }),
     )
+ 
