@@ -340,17 +340,29 @@
           <button class="btn btn-auth" id="btnRegisterTab" onclick="switchAuthTab('register')">Регистрация</button>
         </div>
         <div id="loginForm" class="auth-form">
-          <label for="loginEmail">Логин</label>
-          <input type="text" id="loginEmail" placeholder="Введите логин" autocomplete="username">
+          <label for="loginPhone">Номер телефона</label>
+          <input type="tel" id="loginPhone" placeholder="+7 (___) ___-__-__" autocomplete="tel">
           <label for="loginPassword">Пароль</label>
           <input type="password" id="loginPassword" placeholder="Введите пароль" autocomplete="current-password">
-          <button class="btn btn-login" id="loginSubmitBtn" disabled>Войти</button>
+          <div id="loginError" class="auth-error"
+            style="display:none; color:#e57373; font-size:0.85rem; margin-bottom:10px;"></div>
+          <button class="btn btn-login" id="loginSubmitBtn" onclick="loginByPhone()">Войти</button>
           <button class="btn btn-yandex" id="yandexBtnLogin"
             onclick="window.location.href='/api/yandex-auth/?mode=login'">
             Вход через Яндекс
           </button>
         </div>
         <div id="registerForm" class="auth-form" style="display:none;">
+          <label for="regPhone">Номер телефона</label>
+          <input type="tel" id="regPhone" placeholder="+7 (___) ___-__-__" autocomplete="tel">
+          <label for="regPassword">Пароль</label>
+          <input type="password" id="regPassword" placeholder="Придумайте пароль (минимум 4 символа)"
+            autocomplete="new-password">
+          <label for="regPassword2">Повторите пароль</label>
+          <input type="password" id="regPassword2" placeholder="Повторите пароль" autocomplete="new-password">
+          <div id="regError" class="auth-error"
+            style="display:none; color:#e57373; font-size:0.85rem; margin-bottom:10px;"></div>
+          <button class="btn btn-login" id="registerSubmitBtn" onclick="registerByPhone()">Зарегистрироваться</button>
           <button class="btn btn-yandex" id="yandexBtnRegister"
             onclick="window.location.href='/api/yandex-auth/?mode=register'">
             Регистрация через Яндекс
@@ -526,23 +538,74 @@
       document.getElementById('btnRegisterTab').classList.toggle('active', tab === 'register');
       document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
       document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
-      if (tab === 'login') checkLoginForm();
     }
 
-    function checkLoginForm() {
-      var login = document.getElementById('loginEmail').value.trim();
-      var pass = document.getElementById('loginPassword').value.trim();
-      document.getElementById('loginSubmitBtn').disabled = !(login && pass);
+    /* ---- Регистрация по телефону ---- */
+    function registerByPhone() {
+      var phone = document.getElementById('regPhone').value.trim();
+      var password = document.getElementById('regPassword').value.trim();
+      var password2 = document.getElementById('regPassword2').value.trim();
+      var errorEl = document.getElementById('regError');
+
+      errorEl.style.display = 'none';
+
+      if (!phone) { showAuthError('regError', 'Введите номер телефона'); return; }
+      if (!password || password.length < 4) { showAuthError('regError', 'Пароль должен быть не менее 4 символов'); return; }
+      if (password !== password2) { showAuthError('regError', 'Пароли не совпадают'); return; }
+
+      fetch('/api/auth/register/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: phone, password: password }),
+        credentials: 'include'
+      })
+        .then(function (r) {
+          if (r.ok) {
+            // Успешная регистрация — редирект на welcome
+            window.location.href = '/welcome.html';
+          } else {
+            return r.json().then(function (data) {
+              showAuthError('regError', data.error || 'Ошибка регистрации');
+            });
+          }
+        })
+        .catch(function () { showAuthError('regError', 'Ошибка соединения с сервером'); });
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-      document.getElementById('loginEmail').addEventListener('input', checkLoginForm);
-      document.getElementById('loginPassword').addEventListener('input', checkLoginForm);
-      document.getElementById('loginSubmitBtn').addEventListener('click', function () {
-        window.location.href = '/welcome.html';
-      });
-      checkLoginForm();
-    });
+    /* ---- Вход по телефону ---- */
+    function loginByPhone() {
+      var phone = document.getElementById('loginPhone').value.trim();
+      var password = document.getElementById('loginPassword').value.trim();
+      var errorEl = document.getElementById('loginError');
+
+      errorEl.style.display = 'none';
+
+      if (!phone) { showAuthError('loginError', 'Введите номер телефона'); return; }
+      if (!password) { showAuthError('loginError', 'Введите пароль'); return; }
+
+      fetch('/api/auth/login/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: phone, password: password }),
+        credentials: 'include'
+      })
+        .then(function (r) {
+          if (r.ok) {
+            window.location.href = '/welcome.html';
+          } else {
+            return r.json().then(function (data) {
+              showAuthError('loginError', data.error || 'Ошибка входа');
+            });
+          }
+        })
+        .catch(function () { showAuthError('loginError', 'Ошибка соединения с сервером'); });
+    }
+
+    function showAuthError(id, msg) {
+      var el = document.getElementById(id);
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
 
     /* ---- Urgency modal with timer ---- */
     var urgencyTimerInterval = null;
