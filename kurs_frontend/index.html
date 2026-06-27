@@ -112,6 +112,78 @@
             <h4 class="teacher-name">Диана Пакушина</h4>
             <p class="teacher-desc">ИвГУ<br>Зарубежная филология, переводоведение</p>
           </div>
+
+          <!-- Teacher 4: Дана Дубильер -->
+          <div class="teacher-card" data-teacher="4">
+            <div class="teacher-photo">
+              <img src="images/teacher_4.jpg" alt="Дана Дубильер">
+            </div>
+            <h4 class="teacher-name">Дана Дубильер</h4>
+            <p class="teacher-desc">ТГУ, МГУ<br>Инновационные методики обучения английскому языку: теория и практика</p>
+          </div>
+
+          <!-- Teacher 5: Матвей Маликов -->
+          <div class="teacher-card" data-teacher="5">
+            <div class="teacher-photo">
+              <img src="images/teacher_5.jpg" alt="Матвей Маликов">
+            </div>
+            <h4 class="teacher-name">Матвей Маликов</h4>
+            <p class="teacher-desc">РУДН<br>Филология</p>
+          </div>
+
+          <!-- Teacher 6: Полина Лукина -->
+          <div class="teacher-card" data-teacher="6">
+            <div class="teacher-photo">
+              <img src="images/teacher_6.png" alt="Полина Лукина">
+            </div>
+            <h4 class="teacher-name">Полина Лукина</h4>
+            <p class="teacher-desc">УМЦ<br>Лингвистика межкультурных отношений</p>
+          </div>
+
+          <!-- Teacher 7: Артём Телегин -->
+          <div class="teacher-card" data-teacher="7">
+            <div class="teacher-photo">
+              <img src="images/teacher_7.jpg" alt="Артём Телегин">
+            </div>
+            <h4 class="teacher-name">Артём Телегин</h4>
+            <p class="teacher-desc">ТОГУ<br>Перевод переводоведение</p>
+          </div>
+
+          <!-- Teacher 8: Анастасия Евграшина -->
+          <div class="teacher-card" data-teacher="8">
+            <div class="teacher-photo">
+              <img src="images/teacher_8.jpg" alt="Анастасия Евграшина">
+            </div>
+            <h4 class="teacher-name">Анастасия Евграшина</h4>
+            <p class="teacher-desc">РУДН<br>Филология</p>
+          </div>
+
+          <!-- Teacher 9: Анастасия Фоменкова -->
+          <div class="teacher-card" data-teacher="9">
+            <div class="teacher-photo">
+              <img src="images/teacher_9.jpg" alt="Анастасия Фоменкова">
+            </div>
+            <h4 class="teacher-name">Анастасия Фоменкова</h4>
+            <p class="teacher-desc">МИУ<br>Международные отношения, перевод переводоведение</p>
+          </div>
+
+          <!-- Teacher 10: Марина Шатских -->
+          <div class="teacher-card" data-teacher="10">
+            <div class="teacher-photo">
+              <img src="images/teacher_10.jpg" alt="Марина Шатских">
+            </div>
+            <h4 class="teacher-name">Марина Шатских</h4>
+            <p class="teacher-desc">ТНУ<br>Английский и испанский языки и литература</p>
+          </div>
+
+          <!-- Teacher 11: Юлия Терехова -->
+          <div class="teacher-card" data-teacher="11">
+            <div class="teacher-photo">
+              <img src="images/teacher_11.png" alt="Юлия Терехова">
+            </div>
+            <h4 class="teacher-name">Юлия Терехова</h4>
+            <p class="teacher-desc">Bilim University (Анталия)<br>Политология и международные отношения</p>
+          </div>
         </div>
 
         <!-- Navigation arrows -->
@@ -123,6 +195,14 @@
           <span class="dot active" onclick="goToTeacher(0)"></span>
           <span class="dot" onclick="goToTeacher(1)"></span>
           <span class="dot" onclick="goToTeacher(2)"></span>
+          <span class="dot" onclick="goToTeacher(3)"></span>
+          <span class="dot" onclick="goToTeacher(4)"></span>
+          <span class="dot" onclick="goToTeacher(5)"></span>
+          <span class="dot" onclick="goToTeacher(6)"></span>
+          <span class="dot" onclick="goToTeacher(7)"></span>
+          <span class="dot" onclick="goToTeacher(8)"></span>
+          <span class="dot" onclick="goToTeacher(9)"></span>
+          <span class="dot" onclick="goToTeacher(10)"></span>
         </div>
       </div>
 
@@ -686,7 +766,7 @@
 
     /* ---- Teacher carousel ---- */
     var currentTeacherIndex = 0;
-    var totalTeachers = 3;
+    var totalTeachers = 11;
 
     function slideTeacher(direction) {
       currentTeacherIndex += direction;
