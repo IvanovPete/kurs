@@ -1,4 +1,4 @@
-/* ===========================================
+﻿/* ===========================================
    RESET & BASE
    =========================================== */
 *,
@@ -44,7 +44,7 @@ a {
    HEADER
    =========================================== */
 .header {
-  background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+  background: linear-gradient(135deg, #8d7cff, #c4bcff);
   padding: 12px 0;
   border-bottom: none;
 }
@@ -59,6 +59,13 @@ a {
   display: flex;
   align-items: center;
   margin-right: 0;
+}
+
+/* Прячем ссылку "Вопросы" на мобильных */
+@media (max-width: 768px) {
+  .header-inner nav a[href="#faq"] {
+    display: none;
+  }
 }
 
 .avatar-circle {
@@ -89,7 +96,7 @@ a {
    HERO
    =========================================== */
 .hero {
-  background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+  background: linear-gradient(135deg, #8d7cff, #c4bcff);
   color: #fff;
   padding: 0;
   min-height: 400px;
@@ -231,7 +238,7 @@ a {
 }
 
 .how-item-accent {
-  background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+  background: linear-gradient(135deg, #c4bcff, #8d7cff);
   border: none;
   width: 100% !important;
 }
@@ -272,7 +279,7 @@ a {
 }
 
 .banner-card {
-  background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+  background: linear-gradient(135deg, #8d7cff, #c4bcff);
   border-radius: 20px;
   padding: 24px 30px;
   text-align: center;
@@ -304,7 +311,7 @@ a {
 }
 
 .btn-primary {
-  background: #6c5ce7;
+  background: #8d7cff;
   color: #fff;
   box-shadow: 0 4px 14px rgba(108, 92, 231, 0.25);
 }
@@ -318,7 +325,7 @@ a {
 /* Кнопка "Получить первое занятие бесплатно" в hero — яркая, белая */
 .hero .btn-primary {
   background: #ffffff;
-  color: #6c5ce7;
+  color: #8d7cff;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
   border: 2px solid rgba(255, 255, 255, 0.9);
   font-size: 1rem;
@@ -352,8 +359,8 @@ a {
 }
 
 .btn-ghost:hover {
-  border-color: #6c5ce7;
-  color: #6c5ce7;
+  border-color: #8d7cff;
+  color: #8d7cff;
 }
 
 .btn-cancel {
@@ -381,7 +388,7 @@ a {
 }
 
 .card-accent {
-  background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+  background: linear-gradient(135deg, #c4bcff, #8d7cff);
   color: #fff;
 }
 
@@ -403,7 +410,7 @@ a {
 }
 
 .card-body .btn {
-  background: #6c5ce7;
+  background: #8d7cff;
   color: #fff;
 }
 
@@ -501,7 +508,7 @@ a {
 }
 
 .comfort-item-accent {
-  background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+  background: linear-gradient(135deg, #c4bcff, #8d7cff);
   color: #fff;
   border: none;
 }
@@ -672,7 +679,7 @@ a {
 }
 
 .modal-body input[type="tel"]:focus {
-  border-color: #6c5ce7;
+  border-color: #8d7cff;
   box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.12);
 }
 
@@ -696,7 +703,7 @@ a {
 
 .test-progress {
   font-size: 0.9rem;
-  color: #6c5ce7;
+  color: #8d7cff;
   font-weight: 800;
   margin-bottom: 16px;
   text-transform: uppercase;
@@ -725,17 +732,17 @@ a {
 }
 
 .test-option:hover {
-  border-color: #6c5ce7;
+  border-color: #8d7cff;
   background: #f0e6ff;
 }
 
 .test-option input[type="radio"] {
   margin-right: 12px;
-  accent-color: #6c5ce7;
+  accent-color: #8d7cff;
 }
 
 .test-option:has(input:checked) {
-  border-color: #6c5ce7;
+  border-color: #8d7cff;
   background: #f0e6ff;
   color: #2d3436;
 }
@@ -753,7 +760,7 @@ a {
 }
 
 .test-result h3 {
-  color: #6c5ce7;
+  color: #8d7cff;
   margin-bottom: 20px;
   font-size: 1.4rem;
 }
@@ -886,7 +893,7 @@ a {
   transition: all 0.25s;
   font-family: inherit;
   line-height: 1.3;
-  background: #6c5ce7;
+  background: #8d7cff;
   color: #fff;
   text-decoration: none;
 }
@@ -915,7 +922,7 @@ a {
 .urgency-timer-bar {
   width: 100%;
   height: 6px;
-  background: #6c5ce7;
+  background: #8d7cff;
   transition: width 0.05s linear, background 0.3s;
 }
 
@@ -983,10 +990,10 @@ a {
 .btn-auth {
   flex: 1;
   padding: 11px 16px;
-  border: 2px solid #6c5ce7;
+  border: 2px solid #8d7cff;
   border-radius: 12px;
   background: transparent;
-  color: #6c5ce7;
+  color: #8d7cff;
   font-size: 0.88rem;
   font-weight: 700;
   cursor: pointer;
@@ -997,7 +1004,7 @@ a {
 }
 
 .btn-auth.active {
-  background: #6c5ce7;
+  background: #8d7cff;
   color: #fff;
 }
 
@@ -1030,7 +1037,7 @@ a {
 }
 
 .auth-form input:focus {
-  border-color: #6c5ce7;
+  border-color: #8d7cff;
   box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.12);
 }
 
@@ -1052,7 +1059,7 @@ a {
 }
 
 .btn-login:not(:disabled) {
-  background: #6c5ce7;
+  background: #8d7cff;
   color: #fff;
   pointer-events: auto;
 }
@@ -1173,7 +1180,7 @@ a {
 .teacher-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(108, 92, 231, 0.15);
-  border-color: #a29bfe;
+  border-color: #c4bcff;
 }
 
 /* Фото — среднего размера, прямоугольное */
@@ -1183,7 +1190,7 @@ a {
   border-radius: 16px;
   overflow: hidden;
   margin: 0 auto 14px;
-  border: 3px solid #a29bfe;
+  border: 3px solid #c4bcff;
   box-shadow: 0 4px 14px rgba(108, 92, 231, 0.15);
   flex-shrink: 0;
 }
@@ -1221,7 +1228,7 @@ a {
 }
 
 .btn-play {
-  background: #6c5ce7;
+  background: #8d7cff;
   color: #fff;
   padding: 8px 18px;
   border: none;
@@ -1274,7 +1281,7 @@ a {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: #6c5ce7;
+  background: #8d7cff;
   color: #fff;
   border: none;
   width: 38px;
@@ -1322,12 +1329,12 @@ a {
 }
 
 .slider-dots .dot.active {
-  background: #6c5ce7;
+  background: #8d7cff;
   transform: scale(1.2);
 }
 
 .slider-dots .dot:hover {
-  background: #a29bfe;
+  background: #c4bcff;
 }
 
 /* ===========================================
@@ -1397,7 +1404,7 @@ a {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: #6c5ce7;
+  background: #8d7cff;
   color: #fff;
   border: none;
   width: 44px;
@@ -1445,12 +1452,12 @@ a {
 }
 
 .reviews-dots .dot.active {
-  background: #6c5ce7;
+  background: #8d7cff;
   transform: scale(1.2);
 }
 
 .reviews-dots .dot:hover {
-  background: #a29bfe;
+  background: #c4bcff;
 }
 
 /* Video modal */
@@ -1540,7 +1547,7 @@ a {
 .faq-icon {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #6c5ce7;
+  color: #8d7cff;
   transition: transform 0.3s;
   flex-shrink: 0;
   width: 28px;
@@ -1578,7 +1585,7 @@ a {
 }
 
 .tema-card {
-  background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 50%, #fd79a8 100%);
+  background: linear-gradient(135deg, #c4bcff 0%, #8d7cff 50%, #fd79a8 100%);
   border-radius: 24px;
   padding: 40px 30px;
   text-align: center;
@@ -1622,7 +1629,7 @@ a {
   transition: all 0.25s;
   font-family: inherit;
   background: #ffffff;
-  color: #6c5ce7;
+  color: #8d7cff;
   text-decoration: none;
   letter-spacing: 0.02em;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
@@ -1888,7 +1895,7 @@ a {
 
 .survey-option.active {
   background: #fff;
-  color: #6c5ce7;
+  color: #8d7cff;
   border-color: #fff;
 }
 
@@ -1921,7 +1928,7 @@ a {
   padding: 12px;
   font-size: 0.9rem;
   background: #fff;
-  color: #6c5ce7;
+  color: #8d7cff;
   border: none;
 }
 
@@ -1975,7 +1982,7 @@ a {
 .skill-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(108, 92, 231, 0.12);
-  border-color: #a29bfe;
+  border-color: #c4bcff;
 }
 
 .skill-img {
@@ -1998,7 +2005,7 @@ a {
   margin-top: 28px;
   text-align: center;
   padding: 18px 24px;
-  background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+  background: linear-gradient(135deg, #c4bcff, #8d7cff);
   border-radius: 16px;
   max-width: 800px;
   margin-left: auto;
