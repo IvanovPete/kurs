@@ -24,9 +24,10 @@
   <title>Курс - Английский для школьников онлайн</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="index.css?v=2">
 </head>
 
 <body>
@@ -35,6 +36,10 @@
   <header class="header">
     <div class="container header-inner">
       <img src="images/kurs_logo.png" alt="Курс логотип" class="logo">
+      <nav style="display:flex; gap:20px; align-items:center; margin-right:auto; margin-left:20px;">
+        <a href="#teachers" style="color:#fff; font-weight:700; font-size:0.95rem;">Преподаватели</a>
+        <a href="#reviews" style="color:#fff; font-weight:700; font-size:0.95rem;">Отзывы</a>
+      </nav>
       <div class="header-right">
         <div class="avatar-circle">
           <img src="images/default_avatar.png" alt="Аватар" class="avatar-img">
@@ -45,18 +50,26 @@
 
   <!-- ============ HERO ============ -->
   <section class="hero">
-    <div class="container hero-grid">
-      <div class="hero-text">
-        <h1>Английский — просто</h1>
-        <p class="hero-subtitle">Платформа «Курс» — онлайн-занятия с опытными преподавателями в небольших группах для
-          школьников всех возрастов.</p>
-        <div class="hero-buttons">
-          <button class="btn btn-primary" onclick="openModal()">Получить первое занятие бесплатно</button>
-          <button class="btn btn-secondary" onclick="openTestModal()">Проверить уровень английского ребёнка</button>
+    <div class="hero-grid">
+      <div class="hero-text-wrapper">
+        <div class="hero-text-container">
+          <h1>Английский — просто</h1>
+          <p class="hero-subtitle">Платформа «Курс» — онлайн-занятия с опытными преподавателями в небольших группах для
+            школьников всех возрастов.</p>
+          <div class="hero-buttons">
+            <button class="btn btn-primary" onclick="openModal()">Получить первое занятие бесплатно</button>
+            <button class="btn btn-secondary" onclick="openTestModal()">Проверить уровень английского ребёнка</button>
+          </div>
+          <!-- === ОПРОСНИК ВСЕГДА ВИДЕН === -->
+          <div id="surveyInline" class="survey-inline">
+            <div id="surveyStepContainer">
+              <!-- сюда шаги подставляет JS -->
+            </div>
+          </div>
         </div>
       </div>
       <div class="hero-image">
-        <img src="images/start_picture.jpg" alt="Учёба онлайн" class="hero-image-round">
+        <img src="images/start_picture.jpg" alt="Учёба онлайн" class="hero-image-full">
       </div>
     </div>
   </section>
@@ -66,6 +79,67 @@
     <div class="container">
       <div class="banner-card">
         <h2>Первое занятие бесплатно! Попробуйте и получите результат уже в первые две недели!</h2>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS (features + video) ============ -->
+  <section class="section how-section">
+    <div class="container">
+      <h3 class="how-heading">Как это работает</h3>
+      <div class="how-grid">
+        <div class="how-left">
+          <div class="how-item">
+            <div class="how-icon">🏠</div>
+            <div class="how-text">
+              <h4>Ваш ребёнок учится дома</h4>
+              <p>Не надо никуда ходить и тратить время на дорогу.</p>
+            </div>
+          </div>
+          <div class="how-item">
+            <div class="how-icon">📝</div>
+            <div class="how-text">
+              <h4>Занятия в небольших группах</h4>
+              <p>~5 человек в группе — преподаватель уделяет внимание каждому и заинтересовывает школьников совместной
+                работой.</p>
+            </div>
+          </div>
+          <div class="how-item">
+            <div class="how-icon">💻</div>
+            <div class="how-text">
+              <h4>Занимаемся в Яндекс Телемосте</h4>
+              <p>Ничего не нужно скачивать, просто присылаем ссылку на подключение. Учиться можно с компьютера или
+                телефона.</p>
+            </div>
+          </div>
+          <div class="how-item" style="margin-top: 30px;">
+            <div class="how-icon">💬</div>
+            <div class="how-text">
+              <h4>Комфортное обучение</h4>
+              <p>Согласуем расписание с каждой группой отдельно.</p>
+            </div>
+          </div>
+          <div class="how-item">
+            <div class="how-icon">💬</div>
+            <div class="how-text">
+              <p>Ведём переписку и организуем образовательный процесс в том мессенджере, где Вам удобно.</p>
+            </div>
+          </div>
+          <div class="how-item how-item-accent" style="width:100%;">
+            <div class="how-text">
+              <p>Зарегистрируйтесь — и мы подберём удобное время и группу для вашего ребёнка!</p>
+            </div>
+          </div>
+        </div>
+        <div class="how-right">
+          <video class="how-video" controls playsinline>
+            <source src="videos/teacher_1_video.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+          </video>
+          <div style="margin-top: 20px; text-align: center;">
+            <button class="btn btn-primary" onclick="openModal()">Получить первое занятие бесплатно</button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -184,6 +258,7 @@
             <h4 class="teacher-name">Юлия Терехова</h4>
             <p class="teacher-desc">Bilim University (Анталия)<br>Политология и международные отношения</p>
           </div>
+
         </div>
 
         <!-- Navigation arrows -->
@@ -208,6 +283,50 @@
 
       <div style="text-align:center; margin-top: 30px;">
         <button class="btn btn-primary" onclick="openModal()">Получить первое занятие бесплатно</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TEMA RESOURCE ============ -->
+  <section class="section tema-section">
+    <div class="container">
+      <div class="tema-card">
+        <h2 class="tema-title">Мы разработали специальный тренажёр, где ученики будут выполнять домашние задания,
+          сгенерированные ИИ так, чтобы ребята могли отработать темы и слова, которые вызывают у них наибольшие
+          трудности!
+        </h2>
+        <div class="tema-image-wrapper">
+          <img src="images/tema.png" alt="Tema.study - платформа с ИИ для домашних заданий" class="tema-image">
+        </div>
+        <a href="https://tema.study" target="_blank" class="btn btn-tema">Попробовать тренажёр</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS SECTIONS (под тренажёром) ============ -->
+  <section class="section skills-section">
+    <div class="container">
+      <h3 class="skills-heading">С помощью тренажёра ученик сможет повысить уровень по таким разделам языка:</h3>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <img src="images/reading.png" alt="Чтение" class="skill-img">
+          <h4 class="skill-title">Чтение</h4>
+        </div>
+        <div class="skill-card">
+          <img src="images/grammar.png" alt="Грамматика" class="skill-img">
+          <h4 class="skill-title">Грамматика</h4>
+        </div>
+        <div class="skill-card">
+          <img src="images/vocabular.png" alt="Лексика" class="skill-img">
+          <h4 class="skill-title">Лексика</h4>
+        </div>
+        <div class="skill-card">
+          <img src="images/writing.png" alt="Письмо" class="skill-img">
+          <h4 class="skill-title">Письмо</h4>
+        </div>
+      </div>
+      <div class="skills-note">
+        <p>В тренажёре удобный личный кабинет для родителей</p>
       </div>
     </div>
   </section>
@@ -268,72 +387,6 @@
           <span class="dot" onclick="goToReview(4)"></span>
           <span class="dot" onclick="goToReview(5)"></span>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ TEMA RESOURCE ============ -->
-  <section class="section tema-section">
-    <div class="container">
-      <div class="tema-card">
-        <h2 class="tema-title">Мы разработали специальный тренажёр, где ученики будут выполнять домашние задания,
-          сгенерированные ИИ так, чтобы ребята могли отработать темы и слова, которые вызывают у них наибольшие
-          трудности!
-        </h2>
-        <div class="tema-image-wrapper">
-          <img src="images/tema.png" alt="Tema.study - платформа с ИИ для домашних заданий" class="tema-image">
-        </div>
-        <a href="https://tema.study" target="_blank" class="btn btn-tema">Попробовать тренажёр</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ FEATURES ============ -->
-  <section class="section">
-    <div class="container">
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-img">🏠</div>
-          <h4>Ваш ребёнок учится дома</h4>
-          <p>Не надо никуда ходить и тратить время на дорогу.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-img">📝</div>
-          <h4>Занятия в небольших группах</h4>
-          <p>~5 человек в группе — преподаватель уделяет внимание каждому и заинтересовывает школьников совместной
-            работой.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-img">💻</div>
-          <h4>Занимаемся в Яндекс Телемосте</h4>
-          <p>Ничего не нужно скачивать, просто присылаем ссылку на подключение. Учиться можно с компьютера или телефона.
-          </p>
-          <button class="btn btn-primary" onclick="openModal()">Получить первое занятие бесплатно</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ COMFORT ============ -->
-  <section class="section">
-    <div class="container">
-      <div class="comfort-grid">
-        <div class="comfort-item">
-          <h4>Комфортное обучение</h4>
-          <p>Согласуем расписание с каждой группой отдельно.</p>
-        </div>
-        <div class="comfort-item">
-          <div class="icon">💬</div>
-          <p>Ведём переписку и организуем образовательный процесс в том мессенджере, где Вам удобно.</p>
-        </div>
-        <div class="comfort-item comfort-item-accent">
-          <div class="comfort-accent-content">
-            <p>Зарегистрируйтесь — и мы подберём удобное время и группу для вашего ребёнка!</p>
-          </div>
-        </div>
-      </div>
-      <div style="text-align:center; margin-top: 40px;">
-        <button class="btn btn-primary" onclick="openModal()">Получить первое занятие бесплатно</button>
       </div>
     </div>
   </section>
@@ -608,6 +661,120 @@
 
     function openFormWithLevel() { closeTestModal(); openModal(); }
 
+    /* ---- Пошаговый опросник (всегда виден на странице) ---- */
+    var surveyStep = 0;
+    var surveyAnswers = {};
+
+    function renderSurveyStep() {
+      var container = document.getElementById("surveyStepContainer");
+      if (surveyStep === 0) {
+        // Шаг 1: возраст — кнопки-варианты
+        var ages = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
+        var btns = "";
+        for (var i = 0; i < ages.length; i++) {
+          var active = (surveyAnswers.age && surveyAnswers.age == ages[i]) ? " active" : "";
+          btns += '<button class="survey-option' + active + '" onclick="surveyPickAge(' + ages[i] + ')">' + ages[i] + '</button>';
+        }
+        container.innerHTML =
+          '<h4 class="survey-inline-title">Ответьте на несколько коротких вопросов, чтобы адаптировать курс специально для вашего ребенка</h4>' +
+          '<p class="survey-step-label">Сколько лет ребёнку?</p>' +
+          '<div class="survey-options">' + btns + '</div>' +
+          '<button class="btn btn-primary survey-btn" onclick="surveyNext()"' + (surveyAnswers.age ? "" : " disabled") + '>Далее</button>';
+      } else if (surveyStep === 1) {
+        // Шаг 2: уровень — кнопки
+        var levels = [
+          { val: "none", label: "Никогда не изучал" },
+          { val: "less_year", label: "Менее года" },
+          { val: "two_years", label: "Около двух лет и более" }
+        ];
+        var btns2 = "";
+        for (var li = 0; li < levels.length; li++) {
+          var active2 = (surveyAnswers.level && surveyAnswers.level === levels[li].val) ? " active" : "";
+          btns2 += '<button class="survey-option' + active2 + '" onclick="surveyPickLevel(\'' + levels[li].val + '\')">' + levels[li].label + '</button>';
+        }
+        container.innerHTML =
+          '<h4 class="survey-inline-title">Ответьте на несколько коротких вопросов, чтобы адаптировать курс специально для вашего ребенка</h4>' +
+          '<p class="survey-step-label">Какой уровень подготовки?</p>' +
+          '<div class="survey-options">' + btns2 + '</div>' +
+          '<button class="btn btn-primary survey-btn" onclick="surveyPrev()">Назад</button> ' +
+          '<button class="btn btn-primary survey-btn" onclick="surveyNext()"' + (surveyAnswers.level ? "" : " disabled") + '>Далее</button>';
+      } else if (surveyStep === 2) {
+        // Шаг 3: имя
+        container.innerHTML =
+          '<h4 class="survey-inline-title">Ответьте на несколько коротких вопросов, чтобы адаптировать курс специально для вашего ребенка</h4>' +
+          '<p class="survey-step-label">Как зовут ребёнка?</p>' +
+          '<input type="text" id="surveyField" class="survey-input" placeholder="Введите имя ребёнка" value="' + (surveyAnswers.name || "") + '">' +
+          '<div id="surveyInlineError" class="auth-error" style="display:none; color:#e57373; font-size:0.85rem; margin-top:10px; margin-bottom:0;"></div>' +
+          '<button class="btn btn-primary survey-btn" onclick="surveyPrev()">Назад</button> ' +
+          '<button class="btn btn-primary survey-btn" onclick="submitSurveyInline()">Далее</button>';
+      }
+    }
+
+    function surveyPickAge(val) {
+      surveyAnswers.age = val;
+      renderSurveyStep();
+    }
+
+    function surveyPickLevel(val) {
+      surveyAnswers.level = val;
+      renderSurveyStep();
+    }
+
+    function surveyNext() {
+      // Если ничего не выбрано — блокируем
+      if (surveyStep === 0 && !surveyAnswers.age) return;
+      if (surveyStep === 1 && !surveyAnswers.level) return;
+      surveyStep++;
+      renderSurveyStep();
+    }
+
+    function surveyPrev() {
+      if (surveyStep > 0) {
+        surveyStep--;
+        renderSurveyStep();
+      }
+    }
+
+    function submitSurveyInline() {
+      var field = document.getElementById("surveyField");
+      var name = field.value.trim();
+      var errorEl = document.getElementById("surveyInlineError");
+      errorEl.style.display = "none";
+
+      if (!name) {
+        errorEl.textContent = "Пожалуйста, введите имя ребёнка";
+        errorEl.style.display = "block";
+        return;
+      }
+
+      surveyAnswers.name = name;
+
+      // Открываем окно регистрации
+      openModalWithSurveyNote(surveyAnswers);
+    }
+
+    /* ---- Открытие модалки регистрации с заметкой об опроснике ---- */
+    function openModalWithSurveyNote(surveyData) {
+      var modal = document.getElementById("modal");
+      var titleEl = modal.querySelector(".modal-title");
+      var originalTitle = titleEl.textContent;
+
+      // Меняем заголовок на нужную надпись
+      titleEl.textContent = "Пройдите регистрацию на платформе, чтобы мы могли связаться с вами и предложить подходящую группу для " + surveyData.name + "!";
+
+      // Открываем модалку на вкладке регистрации
+      switchAuthTab('register');
+      modal.classList.add("open");
+
+      // Восстанавливаем заголовок при закрытии
+      var observer = new MutationObserver(function () {
+        if (!modal.classList.contains("open")) {
+          titleEl.textContent = originalTitle;
+          observer.disconnect();
+        }
+      });
+      observer.observe(modal, { attributes: true, attributeFilter: ["class"] });
+    }
 
     /* ---- Auth form tab switching ---- */
     var currentAuthTab = 'login';
@@ -733,6 +900,11 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
+      // Инициализация опросника
+      surveyStep = 0;
+      surveyAnswers = {};
+      renderSurveyStep();
+
       document.getElementById("modal").addEventListener("click", function (e) { if (e.target === this) closeModal(); });
       document.getElementById("testModal").addEventListener("click", function (e) { if (e.target === this) closeTestModal(); });
 
@@ -764,7 +936,7 @@
       // Auto-open urgency modal is removed — it should not open automatically
     });
 
-    /* ---- Teacher carousel ---- */
+    /* ---- Teacher carousel (scrollIntoView + dots синхронизация) ---- */
     var currentTeacherIndex = 0;
     var totalTeachers = 11;
 
@@ -772,31 +944,53 @@
       currentTeacherIndex += direction;
       if (currentTeacherIndex < 0) currentTeacherIndex = totalTeachers - 1;
       if (currentTeacherIndex >= totalTeachers) currentTeacherIndex = 0;
-      updateTeacherSlider();
+      goToTeacherCard(currentTeacherIndex);
     }
 
     function goToTeacher(index) {
       currentTeacherIndex = index;
-      updateTeacherSlider();
+      goToTeacherCard(index);
     }
 
-    function updateTeacherSlider() {
+    function goToTeacherCard(index) {
       var slider = document.getElementById("teacherSlider");
       var cards = slider.querySelectorAll(".teacher-card");
-      if (cards.length > 0) {
-        var cardWidth = cards[0].offsetWidth;
-        var style = window.getComputedStyle(cards[0]);
-        var marginRight = parseFloat(style.marginRight) || 0;
-        var step = cardWidth + marginRight;
-        slider.style.transform = "translateX(-" + (currentTeacherIndex * step) + "px)";
+      if (cards.length > 0 && cards[index]) {
+        cards[index].scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
       }
       var dots = document.querySelectorAll("#teacherDots .dot");
       for (var i = 0; i < dots.length; i++) {
-        dots[i].classList.toggle("active", i === currentTeacherIndex);
+        dots[i].classList.toggle("active", i === index);
       }
     }
 
-    /* ---- Teacher video ---- */
+    // Обновляем доты при скролле
+    document.addEventListener("DOMContentLoaded", function () {
+      var slider = document.getElementById("teacherSlider");
+      if (slider) {
+        slider.addEventListener("scroll", function () {
+          var cards = slider.querySelectorAll(".teacher-card");
+          if (cards.length > 0) {
+            var sliderRect = slider.getBoundingClientRect();
+            var closest = 0;
+            var closestDist = Infinity;
+            for (var i = 0; i < cards.length; i++) {
+              var cardRect = cards[i].getBoundingClientRect();
+              var dist = Math.abs(cardRect.left - sliderRect.left);
+              if (dist < closestDist) {
+                closestDist = dist;
+                closest = i;
+              }
+            }
+            currentTeacherIndex = closest;
+            var dots = document.querySelectorAll("#teacherDots .dot");
+            for (var j = 0; j < dots.length; j++) {
+              dots[j].classList.toggle("active", j === closest);
+            }
+          }
+        });
+      }
+    });    /* ---- Teacher video ---- */
     function openTeacherVideo(videoPath, teacherNum) {
       var video = document.getElementById("teacherVideoPlayer");
       video.src = videoPath;
